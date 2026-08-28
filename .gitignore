@@ -1,0 +1,25 @@
+# OS
+.DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+htmlcov/
+.ruff_cache/
+venv/
+env/
+.env
+*.egg-info/
+dist/
+build/
+
+# Go
+bin/
+coverage.out
+
+# IDEs
+.vscode/
+.idea/
