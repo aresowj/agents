@@ -22,7 +22,17 @@ jobs:
       - name: Run Ruff Linting
         run: python -m ruff check .
       - name: Run Pytest and Coverage
-        run: python -m pytest -v
+        run: |
+          python -m pytest -v > pytest_output.txt 2>&1 || touch pytest_failed.flag
+          cat pytest_output.txt
+          echo "### Pytest Output" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          cat pytest_output.txt >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          if [ -f pytest_failed.flag ]; then
+            echo "Pytest failed!"
+            exit 1
+          fi
 
   test-go:
     runs-on: ubuntu-latest
