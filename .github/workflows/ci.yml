@@ -25,10 +25,9 @@ jobs:
         run: |
           python -m pytest -v > pytest_output.txt 2>&1 || touch pytest_failed.flag
           cat pytest_output.txt
-          echo "### Pytest Output" >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
-          cat pytest_output.txt >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
+          while IFS= read -r line; do
+            echo "::warning::$line"
+          done < pytest_output.txt
           if [ -f pytest_failed.flag ]; then
             echo "Pytest failed!"
             exit 1
