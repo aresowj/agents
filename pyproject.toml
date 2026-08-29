@@ -2,7 +2,7 @@
 name = "agents-framework"
 version = "0.1.0"
 description = "Agent Workflow Framework with MCP Server"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 dependencies = [
     "mcp>=1.0.0",
     "litellm>=1.0.0",
@@ -26,7 +26,7 @@ testpaths = [
 
 [tool.ruff]
 line-length = 100
-target-version = "py310"
+target-version = "py311"
 
 [tool.ruff.lint]
 select = ["E", "F", "I"]
