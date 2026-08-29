@@ -20,15 +20,13 @@ def test_generate_tests_python(tmp_path):
 
     with patch("litellm.completion", return_value=mock_llm_response), patch(
         "subprocess.run"
-    ) as mock_subproc:
+    ) as mock_subproc, patch("os.makedirs"), patch("builtins.open", create=True):
         res = asyncio.run(generate_tests_for_coverage(str(src_file), "python"))
         expected_test_path = os.path.join("tests", "test_module.py")
         assert f"Successfully generated tests and saved to {expected_test_path}" in res
         mock_subproc.assert_called_once_with(
             ["ruff", "format", expected_test_path], capture_output=True
         )
-        if os.path.exists(expected_test_path):
-            os.remove(expected_test_path)
 
 
 def test_generate_tests_go(tmp_path):
@@ -41,13 +39,11 @@ def test_generate_tests_go(tmp_path):
 
     with patch("litellm.completion", return_value=mock_llm_response), patch(
         "subprocess.run"
-    ) as mock_subproc:
+    ) as mock_subproc, patch("os.makedirs"), patch("builtins.open", create=True):
         res = asyncio.run(generate_tests_for_coverage(str(src_file), "go"))
         expected_test_path = str(tmp_path / "calc_test.go")
         assert f"Successfully generated tests and saved to {expected_test_path}" in res
         mock_subproc.assert_called_once_with(["go", "fmt", expected_test_path], capture_output=True)
-        if os.path.exists(expected_test_path):
-            os.remove(expected_test_path)
 
 
 def test_generate_tests_unsupported_language(tmp_path):
