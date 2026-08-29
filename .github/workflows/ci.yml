@@ -25,9 +25,7 @@ jobs:
         run: |
           python -m pytest -v > pytest_output.txt 2>&1 || touch pytest_failed.flag
           cat pytest_output.txt
-          while IFS= read -r line; do
-            echo "::warning::$line"
-          done < pytest_output.txt
+          python -c "msg = open('pytest_output.txt').read().replace('%', '%25').replace('\r', '%0D').replace('\n', '%0A'); print(f'::error::{msg}')"
           if [ -f pytest_failed.flag ]; then
             echo "Pytest failed!"
             exit 1
