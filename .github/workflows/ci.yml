@@ -20,9 +20,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install -e ".[dev]"
       - name: Run Ruff Linting
-        run: ruff check .
+        run: python -m ruff check .
       - name: Run Pytest and Coverage
-        run: pytest
+        run: python -m pytest -v
 
   test-go:
     runs-on: ubuntu-latest
