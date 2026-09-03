@@ -22,18 +22,6 @@ This file records skills installed outside this repository so the shared Codex s
   - `security-threat-model` from `skills/.curated/security-threat-model`
   - `playwright` from `skills/.curated/playwright`
 
-### jwilger Agent Skills
-
-- Repository: `https://github.com/jwilger/agent-skills.git`
-- Ref: `e2f5e19add7de48e750b3116ceaaf344f2ac1628`
-- Skills:
-  - `tdd` from `skills/tdd`
-  - `domain-modeling` from `skills/domain-modeling`
-  - `code-review` from `skills/code-review`
-  - `architecture-decisions` from `skills/architecture-decisions`
-  - `debugging-protocol` from `skills/debugging-protocol`
-  - `mutation-testing` from `skills/mutation-testing`
-
 ### addyosmani Agent Skills
 
 - Repository: `https://github.com/addyosmani/agent-skills.git`
@@ -60,15 +48,6 @@ python $installer --repo openai/skills --ref 49f948faa9258a0c61caceaf225e1796513
   skills/.curated/playwright `
   --dest $destination
 
-python $installer --repo jwilger/agent-skills --ref e2f5e19add7de48e750b3116ceaaf344f2ac1628 --path `
-  skills/tdd `
-  skills/domain-modeling `
-  skills/code-review `
-  skills/architecture-decisions `
-  skills/debugging-protocol `
-  skills/mutation-testing `
-  --dest $destination
-
 python $installer --repo addyosmani/agent-skills --ref d2c37ef6225dd8726cdd369a8030307f48592d26 --path `
   skills/spec-driven-development `
   skills/planning-and-task-breakdown `
@@ -87,8 +66,6 @@ Get-ChildItem $destination -Directory | ForEach-Object {
   python $validator $_.FullName
 }
 ```
-
-The six `jwilger/agent-skills` entries currently use additional frontmatter fields (`effort` and, for some skills, `compatibility`) that the local validator does not allow. Treat those as known packaging warnings from this validator; do not edit the external skills unless intentionally maintaining a local fork.
 
 ## Maintenance Rules
 
