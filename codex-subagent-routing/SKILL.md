@@ -9,6 +9,8 @@ description: Routes bounded, independently verifiable work to Codex subagents an
 
 Delegate only when the work is concrete, bounded, and can progress independently alongside useful parent work. Do not delegate a task merely because it is large, vague, or sequential. Keep work local when it requires frequent user interaction, depends on a shared mutable edit area, or needs the parent’s continuous judgment.
 
+When in doubt, prefer fewer agents with better-scoped prompts over many small agents. Subagents should save time, not multiply overhead.
+
 Before spawning, define the deliverable, relevant scope, acceptance criteria, and whether the agent may edit files. Give each agent a distinct ownership boundary; never assign overlapping edits in the same files unless coordinated sequentially.
 
 ## Route by task shape
@@ -17,6 +19,43 @@ Before spawning, define the deliverable, relevant scope, acceptance criteria, an
 - Keep design decisions, user communication, integration, and final validation with the parent.
 - Use a specialist only when its instructions or tools materially improve the result.
 - Prefer one agent per coherent outcome. Avoid a hierarchy of tiny tasks and avoid using agents for trivial lookups.
+
+## Model Routing Table
+
+Use the lightest model that can reliably finish the job. Escalate only when the task needs deeper reasoning, broader synthesis, or higher precision.
+
+| Task type | Complexity | Recommended first pick | Other viable options | Notes |
+|---|---:|---|---|---|
+| Planning, decomposition, orchestration, and result synthesis | Any | `gpt-5.6-terra` | `gpt-5.6-luna` for simple plans; `gpt-5.6-sol` for high-stakes or highly ambiguous work | The orchestrator owns scope, model selection, sequencing, quality checks, and final integration. |
+| File search, repo reconnaissance, simple summaries | Low | `gpt-5.4-mini` | `gpt-5.4`, `gpt-5.6-luna` | Fastest and cheapest when the answer is mostly retrieval or straightforward synthesis. |
+| Small code edits, isolated bug fixes, straightforward tests | Low to medium | `gpt-5.4` | `gpt-5.4-mini`, `gpt-5.6-luna` | Good balance for bounded implementation work. |
+| Multi-file implementation, moderate debugging, API wiring, refactors with clear boundaries | Medium | `gpt-5.6-luna` | `gpt-5.4`, `gpt-5.6-terra` | Preferred default for most agent work when you want capability without spending too quickly. |
+| Hard debugging, tricky regressions, design-sensitive changes, non-obvious failure analysis | Medium to high | `gpt-5.6-terra` | `gpt-5.6-luna`, `gpt-5.6-sol` | Use when the task needs more reasoning depth or careful tradeoff handling. |
+| Architecture decisions, cross-cutting synthesis, high-uncertainty investigations, critical review | High | `gpt-5.6-sol` | `gpt-5.6-terra`, `gpt-5.6-luna` | Reserve for the hardest work, or when lower-cost models have already stalled. |
+| Long-running independent review or validation where cost matters more than speed | Low to medium | `gpt-5.4-mini` | `gpt-5.4`, `gpt-5.6-luna` | Useful for broad sweeps, checklist-style validation, and first-pass triage. |
+
+## Routing Rules
+
+- Start with `gpt-5.4-mini` for shallow discovery and `gpt-5.4` for bounded implementation unless the task is clearly complex.
+- Default to `gpt-5.6-luna` for most real coding subagents because it balances capability and usage efficiency well.
+- Reach for `gpt-5.6-terra` when the work is likely to involve subtle reasoning, cross-file impact, or hard-to-diagnose behavior.
+- Reserve `gpt-5.6-sol` for the rare cases where the added reasoning quality is worth the extra usage.
+- If a lower model produces incomplete, low-confidence, or repetitive output, retry once with the next tier up instead of jumping straight to the most expensive model.
+- When splitting work across multiple agents, mix models intentionally: use cheaper models for reconnaissance and stronger models for the final hard slice.
+
+## Orchestrate Subtasks
+
+Use an orchestrator for any delegation workflow. The orchestrator may be the parent agent or a dedicated planning subtask, but it must remain responsible for the end-to-end result rather than treating subagent output as authoritative.
+
+1. Decompose the request into bounded, independently verifiable subtasks.
+2. Assign each subtask one clear owner, acceptance criteria, relevant context, and the model selected from the routing table.
+3. Spin up each subtask separately with its assigned model. Do not make subagents choose their own model or silently expand their scope.
+4. Ask every subagent to report its conclusion, evidence, changed files, validation performed, and unresolved risks.
+5. Inspect each result against the acceptance criteria. Check the actual diff or evidence when available; do not rely on a confident-sounding summary.
+6. Resolve conflicts, fill gaps, and decide whether a targeted retry or escalation is warranted.
+7. Integrate the verified results and run final validation in the parent context.
+
+For cost control, keep orchestration itself at `gpt-5.6-luna` when decomposition and verification are straightforward. Use `gpt-5.6-terra` as the normal reasoning-oriented orchestrator, and escalate the orchestrator to `gpt-5.6-sol` only when the plan has high uncertainty, cross-cutting consequences, or unusually costly failure modes. Prefer one orchestrator plus a small number of well-scoped subtasks over multiple planning layers.
 
 ## Dispatch
 
