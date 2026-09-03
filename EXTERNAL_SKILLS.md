@@ -27,10 +27,31 @@ This file records skills installed outside this repository so the shared Codex s
 - Repository: `https://github.com/addyosmani/agent-skills.git`
 - Ref: `d2c37ef6225dd8726cdd369a8030307f48592d26`
 - Skills:
+  - `api-and-interface-design` from `skills/api-and-interface-design`
+  - `browser-testing-with-devtools` from `skills/browser-testing-with-devtools`
+  - `ci-cd-and-automation` from `skills/ci-cd-and-automation`
+  - `code-review-and-quality` from `skills/code-review-and-quality`
+  - `code-simplification` from `skills/code-simplification`
+  - `constraint-driven-development` from `skills/constraint-driven-development`
+  - `context-engineering` from `skills/context-engineering`
+  - `deprecation-and-migration` from `skills/deprecation-and-migration`
+  - `documentation-and-adrs` from `skills/documentation-and-adrs`
+  - `doubt-driven-development` from `skills/doubt-driven-development`
+  - `frontend-ui-engineering` from `skills/frontend-ui-engineering`
+  - `git-workflow-and-versioning` from `skills/git-workflow-and-versioning`
+  - `idea-refine` from `skills/idea-refine`
+  - `interview-me` from `skills/interview-me`
+  - `observability-and-instrumentation` from `skills/observability-and-instrumentation`
+  - `performance-optimization` from `skills/performance-optimization`
+  - `security-and-hardening` from `skills/security-and-hardening`
+  - `shipping-and-launch` from `skills/shipping-and-launch`
+  - `source-driven-development` from `skills/source-driven-development`
   - `spec-driven-development` from `skills/spec-driven-development`
   - `planning-and-task-breakdown` from `skills/planning-and-task-breakdown`
   - `incremental-implementation` from `skills/incremental-implementation`
   - `debugging-and-error-recovery` from `skills/debugging-and-error-recovery`
+  - `test-driven-development` from `skills/test-driven-development`
+  - `using-agent-skills` from `skills/using-agent-skills`
 
 ## Restore Commands
 
@@ -49,10 +70,31 @@ python $installer --repo openai/skills --ref 49f948faa9258a0c61caceaf225e1796513
   --dest $destination
 
 python $installer --repo addyosmani/agent-skills --ref d2c37ef6225dd8726cdd369a8030307f48592d26 --path `
+  skills/api-and-interface-design `
+  skills/browser-testing-with-devtools `
+  skills/ci-cd-and-automation `
+  skills/code-review-and-quality `
+  skills/code-simplification `
+  skills/constraint-driven-development `
+  skills/context-engineering `
+  skills/deprecation-and-migration `
+  skills/documentation-and-adrs `
+  skills/doubt-driven-development `
+  skills/frontend-ui-engineering `
+  skills/git-workflow-and-versioning `
+  skills/idea-refine `
+  skills/interview-me `
+  skills/observability-and-instrumentation `
+  skills/performance-optimization `
+  skills/security-and-hardening `
+  skills/shipping-and-launch `
+  skills/source-driven-development `
   skills/spec-driven-development `
   skills/planning-and-task-breakdown `
   skills/incremental-implementation `
   skills/debugging-and-error-recovery `
+  skills/test-driven-development `
+  skills/using-agent-skills `
   --dest $destination
 ```
 
