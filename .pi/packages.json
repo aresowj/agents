@@ -1,0 +1,18 @@
+{
+  "packages": [
+    "git:https://github.com/hasit/pi-community-themes",
+    "npm:pi-mcp-adapter",
+    "npm:pi-web-access",
+    "npm:pi-subagents",
+    "npm:@juicesharp/rpiv-ask-user-question",
+    "npm:pi-background-tasks",
+    "npm:@juicesharp/rpiv-todo",
+    "npm:context-mode",
+    "npm:pi-lens",
+    "npm:@plannotator/pi-extension",
+    "npm:@narumitw/pi-goal",
+    "npm:pi-simplify",
+    "npm:billion-context"
+  ],
+  "install": "For each npm package: pi install <package-name>. For git: pi install git:<url>"
+}

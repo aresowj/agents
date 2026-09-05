@@ -1,0 +1,27 @@
+{
+  "lastChangelogVersion": "0.85.1",
+  "theme": "material-palenight",
+  "packages": [
+    "git:https://github.com/hasit/pi-community-themes",
+    "npm:pi-mcp-adapter",
+    "npm:pi-web-access",
+    "npm:pi-subagents",
+    "npm:@juicesharp/rpiv-ask-user-question",
+    "npm:pi-background-tasks",
+    "npm:@juicesharp/rpiv-todo",
+    "npm:context-mode",
+    "npm:pi-lens",
+    "npm:@plannotator/pi-extension",
+    "npm:@narumitw/pi-goal",
+    "npm:pi-simplify",
+    "npm:billion-context"
+  ],
+  "outputPad": 1,
+  "terminal": {
+    "showTerminalProgress": true
+  },
+  "hideThinkingBlock": true,
+  "tuiMode": "regular",
+  "defaultProvider": "lmstudio",
+  "defaultModel": "qwen3.8-27b-turbo-fable-cold-fusion-735-882-heretic-uncensored-neo-coder-max-mtp"
+}

@@ -1,0 +1,575 @@
+{
+  "llama.cpp": {
+    "models": [
+      {
+        "id": "DavidAU/Qwen3.8-27B-TURBO-Fable-Cold-Fusion-735-882-Heretic-Uncensored-NEO-CODER-MAX-MTP-GGUF:Q4_K_M",
+        "name": "DavidAU/Qwen3.8-27B-TURBO-Fable-Cold-Fusion-735-882-Heretic-Uncensored-NEO-CODER-MAX-MTP-GGUF:Q4_K_M",
+        "api": "openai-completions",
+        "provider": "llama.cpp",
+        "baseUrl": "http://localhost:8080/v1",
+        "reasoning": false,
+        "input": [
+          "text"
+        ],
+        "cost": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0
+        },
+        "contextWindow": 128000,
+        "maxTokens": 128000,
+        "compat": {
+          "supportsStore": false,
+          "supportsDeveloperRole": false,
+          "supportsReasoningEffort": false,
+          "supportsUsageInStreaming": true,
+          "supportsStrictMode": false,
+          "maxTokensField": "max_tokens"
+        }
+      },
+      {
+        "id": "devstral-small-2-24b-q4",
+        "name": "devstral-small-2-24b-q4",
+        "api": "openai-completions",
+        "provider": "llama.cpp",
+        "baseUrl": "http://localhost:8080/v1",
+        "reasoning": false,
+        "input": [
+          "text"
+        ],
+        "cost": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0
+        },
+        "contextWindow": 128000,
+        "maxTokens": 128000,
+        "compat": {
+          "supportsStore": false,
+          "supportsDeveloperRole": false,
+          "supportsReasoningEffort": false,
+          "supportsUsageInStreaming": true,
+          "supportsStrictMode": false,
+          "maxTokensField": "max_tokens"
+        }
+      },
+      {
+        "id": "gemma-4-26b-a4b-q4",
+        "name": "gemma-4-26b-a4b-q4",
+        "api": "openai-completions",
+        "provider": "llama.cpp",
+        "baseUrl": "http://localhost:8080/v1",
+        "reasoning": false,
+        "input": [
+          "text"
+        ],
+        "cost": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0
+        },
+        "contextWindow": 128000,
+        "maxTokens": 128000,
+        "compat": {
+          "supportsStore": false,
+          "supportsDeveloperRole": false,
+          "supportsReasoningEffort": false,
+          "supportsUsageInStreaming": true,
+          "supportsStrictMode": false,
+          "maxTokensField": "max_tokens"
+        }
+      },
+      {
+        "id": "gemma-4-26b-a4b-q5",
+        "name": "gemma-4-26b-a4b-q5",
+        "api": "openai-completions",
+        "provider": "llama.cpp",
+        "baseUrl": "http://localhost:8080/v1",
+        "reasoning": false,
+        "input": [
+          "text"
+        ],
+        "cost": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0
+        },
+        "contextWindow": 128000,
+        "maxTokens": 128000,
+        "compat": {
+          "supportsStore": false,
+          "supportsDeveloperRole": false,
+          "supportsReasoningEffort": false,
+          "supportsUsageInStreaming": true,
+          "supportsStrictMode": false,
+          "maxTokensField": "max_tokens"
+        }
+      },
+      {
+        "id": "gemma-4-26b-a4b-q6",
+        "name": "gemma-4-26b-a4b-q6",
+        "api": "openai-completions",
+        "provider": "llama.cpp",
+        "baseUrl": "http://localhost:8080/v1",
+        "reasoning": false,
+        "input": [
+          "text"
+        ],
+        "cost": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0
+        },
+        "contextWindow": 128000,
+        "maxTokens": 128000,
+        "compat": {
+          "supportsStore": false,
+          "supportsDeveloperRole": false,
+          "supportsReasoningEffort": false,
+          "supportsUsageInStreaming": true,
+          "supportsStrictMode": false,
+          "maxTokensField": "max_tokens"
+        }
+      },
+      {
+        "id": "gpt-oss-20b-mxfp4",
+        "name": "gpt-oss-20b-mxfp4",
+        "api": "openai-completions",
+        "provider": "llama.cpp",
+        "baseUrl": "http://localhost:8080/v1",
+        "reasoning": false,
+        "input": [
+          "text"
+        ],
+        "cost": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0
+        },
+        "contextWindow": 128000,
+        "maxTokens": 128000,
+        "compat": {
+          "supportsStore": false,
+          "supportsDeveloperRole": false,
+          "supportsReasoningEffort": false,
+          "supportsUsageInStreaming": true,
+          "supportsStrictMode": false,
+          "maxTokensField": "max_tokens"
+        }
+      },
+      {
+        "id": "lfm2-24b-a2b-q4",
+        "name": "lfm2-24b-a2b-q4",
+        "api": "openai-completions",
+        "provider": "llama.cpp",
+        "baseUrl": "http://localhost:8080/v1",
+        "reasoning": false,
+        "input": [
+          "text"
+        ],
+        "cost": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0
+        },
+        "contextWindow": 128000,
+        "maxTokens": 128000,
+        "compat": {
+          "supportsStore": false,
+          "supportsDeveloperRole": false,
+          "supportsReasoningEffort": false,
+          "supportsUsageInStreaming": true,
+          "supportsStrictMode": false,
+          "maxTokensField": "max_tokens"
+        }
+      },
+      {
+        "id": "lfm2-8b-a1b-q8",
+        "name": "lfm2-8b-a1b-q8",
+        "api": "openai-completions",
+        "provider": "llama.cpp",
+        "baseUrl": "http://localhost:8080/v1",
+        "reasoning": false,
+        "input": [
+          "text"
+        ],
+        "cost": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0
+        },
+        "contextWindow": 128000,
+        "maxTokens": 128000,
+        "compat": {
+          "supportsStore": false,
+          "supportsDeveloperRole": false,
+          "supportsReasoningEffort": false,
+          "supportsUsageInStreaming": true,
+          "supportsStrictMode": false,
+          "maxTokensField": "max_tokens"
+        }
+      },
+      {
+        "id": "ministral-14b-reasoning-q4",
+        "name": "ministral-14b-reasoning-q4",
+        "api": "openai-completions",
+        "provider": "llama.cpp",
+        "baseUrl": "http://localhost:8080/v1",
+        "reasoning": false,
+        "input": [
+          "text",
+          "image"
+        ],
+        "cost": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0
+        },
+        "contextWindow": 128000,
+        "maxTokens": 128000,
+        "compat": {
+          "supportsStore": false,
+          "supportsDeveloperRole": false,
+          "supportsReasoningEffort": false,
+          "supportsUsageInStreaming": true,
+          "supportsStrictMode": false,
+          "maxTokensField": "max_tokens"
+        }
+      },
+      {
+        "id": "ministral-14b-reasoning-q4-duplicate",
+        "name": "ministral-14b-reasoning-q4-duplicate",
+        "api": "openai-completions",
+        "provider": "llama.cpp",
+        "baseUrl": "http://localhost:8080/v1",
+        "reasoning": false,
+        "input": [
+          "text"
+        ],
+        "cost": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0
+        },
+        "contextWindow": 128000,
+        "maxTokens": 128000,
+        "compat": {
+          "supportsStore": false,
+          "supportsDeveloperRole": false,
+          "supportsReasoningEffort": false,
+          "supportsUsageInStreaming": true,
+          "supportsStrictMode": false,
+          "maxTokensField": "max_tokens"
+        }
+      },
+      {
+        "id": "ministral-8b-reasoning-q4",
+        "name": "ministral-8b-reasoning-q4",
+        "api": "openai-completions",
+        "provider": "llama.cpp",
+        "baseUrl": "http://localhost:8080/v1",
+        "reasoning": false,
+        "input": [
+          "text"
+        ],
+        "cost": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0
+        },
+        "contextWindow": 128000,
+        "maxTokens": 128000,
+        "compat": {
+          "supportsStore": false,
+          "supportsDeveloperRole": false,
+          "supportsReasoningEffort": false,
+          "supportsUsageInStreaming": true,
+          "supportsStrictMode": false,
+          "maxTokensField": "max_tokens"
+        }
+      },
+      {
+        "id": "omnicoder-9b-q6",
+        "name": "omnicoder-9b-q6",
+        "api": "openai-completions",
+        "provider": "llama.cpp",
+        "baseUrl": "http://localhost:8080/v1",
+        "reasoning": false,
+        "input": [
+          "text"
+        ],
+        "cost": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0
+        },
+        "contextWindow": 128000,
+        "maxTokens": 128000,
+        "compat": {
+          "supportsStore": false,
+          "supportsDeveloperRole": false,
+          "supportsReasoningEffort": false,
+          "supportsUsageInStreaming": true,
+          "supportsStrictMode": false,
+          "maxTokensField": "max_tokens"
+        }
+      },
+      {
+        "id": "qwen2.5-coder-1.5b-q8",
+        "name": "qwen2.5-coder-1.5b-q8",
+        "api": "openai-completions",
+        "provider": "llama.cpp",
+        "baseUrl": "http://localhost:8080/v1",
+        "reasoning": false,
+        "input": [
+          "text"
+        ],
+        "cost": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0
+        },
+        "contextWindow": 128000,
+        "maxTokens": 128000,
+        "compat": {
+          "supportsStore": false,
+          "supportsDeveloperRole": false,
+          "supportsReasoningEffort": false,
+          "supportsUsageInStreaming": true,
+          "supportsStrictMode": false,
+          "maxTokensField": "max_tokens"
+        }
+      },
+      {
+        "id": "qwen2.5-coder-32b-q5",
+        "name": "qwen2.5-coder-32b-q5",
+        "api": "openai-completions",
+        "provider": "llama.cpp",
+        "baseUrl": "http://localhost:8080/v1",
+        "reasoning": false,
+        "input": [
+          "text"
+        ],
+        "cost": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0
+        },
+        "contextWindow": 128000,
+        "maxTokens": 128000,
+        "compat": {
+          "supportsStore": false,
+          "supportsDeveloperRole": false,
+          "supportsReasoningEffort": false,
+          "supportsUsageInStreaming": true,
+          "supportsStrictMode": false,
+          "maxTokensField": "max_tokens"
+        }
+      },
+      {
+        "id": "qwen3.5-9b-deepseek-q8",
+        "name": "qwen3.5-9b-deepseek-q8",
+        "api": "openai-completions",
+        "provider": "llama.cpp",
+        "baseUrl": "http://localhost:8080/v1",
+        "reasoning": false,
+        "input": [
+          "text"
+        ],
+        "cost": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0
+        },
+        "contextWindow": 128000,
+        "maxTokens": 128000,
+        "compat": {
+          "supportsStore": false,
+          "supportsDeveloperRole": false,
+          "supportsReasoningEffort": false,
+          "supportsUsageInStreaming": true,
+          "supportsStrictMode": false,
+          "maxTokensField": "max_tokens"
+        }
+      },
+      {
+        "id": "qwen3.5-9b-q4",
+        "name": "qwen3.5-9b-q4",
+        "api": "openai-completions",
+        "provider": "llama.cpp",
+        "baseUrl": "http://localhost:8080/v1",
+        "reasoning": false,
+        "input": [
+          "text"
+        ],
+        "cost": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0
+        },
+        "contextWindow": 128000,
+        "maxTokens": 128000,
+        "compat": {
+          "supportsStore": false,
+          "supportsDeveloperRole": false,
+          "supportsReasoningEffort": false,
+          "supportsUsageInStreaming": true,
+          "supportsStrictMode": false,
+          "maxTokensField": "max_tokens"
+        }
+      },
+      {
+        "id": "qwen3.5-9b-q8",
+        "name": "qwen3.5-9b-q8",
+        "api": "openai-completions",
+        "provider": "llama.cpp",
+        "baseUrl": "http://localhost:8080/v1",
+        "reasoning": false,
+        "input": [
+          "text"
+        ],
+        "cost": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0
+        },
+        "contextWindow": 128000,
+        "maxTokens": 128000,
+        "compat": {
+          "supportsStore": false,
+          "supportsDeveloperRole": false,
+          "supportsReasoningEffort": false,
+          "supportsUsageInStreaming": true,
+          "supportsStrictMode": false,
+          "maxTokensField": "max_tokens"
+        }
+      },
+      {
+        "id": "qwen3.6-27b-q4",
+        "name": "qwen3.6-27b-q4",
+        "api": "openai-completions",
+        "provider": "llama.cpp",
+        "baseUrl": "http://localhost:8080/v1",
+        "reasoning": false,
+        "input": [
+          "text"
+        ],
+        "cost": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0
+        },
+        "contextWindow": 128000,
+        "maxTokens": 128000,
+        "compat": {
+          "supportsStore": false,
+          "supportsDeveloperRole": false,
+          "supportsReasoningEffort": false,
+          "supportsUsageInStreaming": true,
+          "supportsStrictMode": false,
+          "maxTokensField": "max_tokens"
+        }
+      },
+      {
+        "id": "qwen3.6-27b-q6",
+        "name": "qwen3.6-27b-q6",
+        "api": "openai-completions",
+        "provider": "llama.cpp",
+        "baseUrl": "http://localhost:8080/v1",
+        "reasoning": false,
+        "input": [
+          "text"
+        ],
+        "cost": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0
+        },
+        "contextWindow": 128000,
+        "maxTokens": 128000,
+        "compat": {
+          "supportsStore": false,
+          "supportsDeveloperRole": false,
+          "supportsReasoningEffort": false,
+          "supportsUsageInStreaming": true,
+          "supportsStrictMode": false,
+          "maxTokensField": "max_tokens"
+        }
+      },
+      {
+        "id": "qwen3.8-27b-ud-q4",
+        "name": "qwen3.8-27b-ud-q4",
+        "api": "openai-completions",
+        "provider": "llama.cpp",
+        "baseUrl": "http://localhost:8080/v1",
+        "reasoning": false,
+        "input": [
+          "text"
+        ],
+        "cost": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0
+        },
+        "contextWindow": 128000,
+        "maxTokens": 128000,
+        "compat": {
+          "supportsStore": false,
+          "supportsDeveloperRole": false,
+          "supportsReasoningEffort": false,
+          "supportsUsageInStreaming": true,
+          "supportsStrictMode": false,
+          "maxTokensField": "max_tokens"
+        }
+      },
+      {
+        "id": "qwen3.8-27b-ud-q6",
+        "name": "qwen3.8-27b-ud-q6",
+        "api": "openai-completions",
+        "provider": "llama.cpp",
+        "baseUrl": "http://localhost:8080/v1",
+        "reasoning": false,
+        "input": [
+          "text"
+        ],
+        "cost": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0
+        },
+        "contextWindow": 128000,
+        "maxTokens": 128000,
+        "compat": {
+          "supportsStore": false,
+          "supportsDeveloperRole": false,
+          "supportsReasoningEffort": false,
+          "supportsUsageInStreaming": true,
+          "supportsStrictMode": false,
+          "maxTokensField": "max_tokens"
+        }
+      }
+    ],
+    "checkedAt": 1788621709506
+  }
+}
