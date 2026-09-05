@@ -10,6 +10,7 @@ __pycache__/
 htmlcov/
 .ruff_cache/
 venv/
+.venv/
 env/
 .env
 *.egg-info/
