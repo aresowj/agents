@@ -43,6 +43,52 @@ When running offline, conserving cloud rate limits, or delegating local code exe
 > Unless a task requires a different specialist, the orchestrator SHOULD route local coding, debugging, test fixing, and multi-file code editing tasks to **`devstral-small-2-24b-q4` by default**. Built specifically for agentic loops (68.0% SWE-bench Verified), it excels at repo navigation, unified diffs, tool calling, and test verification.
 > *The orchestrator remains empowered to route to other models when task characteristics demand it* (e.g., deep mathematical reasoning, fast regex filtering, or specialized logic).
 
+### Direct Invocation Pattern (Zero-Configuration Integration)
+Antigravity does not need any changes to global CLI settings (`settings.json`) or proxy layers to utilize local LLMs. Because Antigravity has native terminal execution capabilities (`run_command`), the orchestrator or subagent communicates directly with `llama.cpp` using HTTP requests:
+
+1. **How It Works**:
+   - The Antigravity orchestrator (e.g. Gemini 3.8 Flash / Gemini 3.1 Pro) manages the user conversation, workspace state, and tool permissions.
+   - For offline tasks, boilerplate drafting, heavy code generation, or quota-saving batch edits, the agent crafts a scoped prompt with file context.
+   - The agent calls `http://localhost:8080/v1/chat/completions` using `run_command` via `curl` or a Python one-liner.
+   - The returned code is parsed, written to disk with write/replace tools, and validated locally against test suites.
+
+2. **Standard Execution Example (`curl`)**:
+   ```bash
+   curl -s -X POST http://localhost:8080/v1/chat/completions \
+     -H "Content-Type: application/json" \
+     -d '{
+       "model": "devstral-small-2-24b-q4",
+       "messages": [
+         {"role": "system", "content": "You are an expert software engineer. Output only the requested code implementation without conversational filler."},
+         {"role": "user", "content": "Implement a Python utility function that..."}
+       ],
+       "temperature": 0.2
+     }'
+   ```
+
+3. **Python Script Pattern for Structured Tasks**:
+   When prompting with large context or multiple files, write a scratch script in `<appDataDir>/brain/<conversation-id>/scratch/` and execute it:
+   ```python
+   import json, urllib.request
+
+   payload = {
+       "model": "devstral-small-2-24b-q4",
+       "messages": [
+           {"role": "system", "content": "You are a code generation agent."},
+           {"role": "user", "content": prompt_with_context}
+       ],
+       "temperature": 0.1
+   }
+   req = urllib.request.Request(
+       "http://localhost:8080/v1/chat/completions",
+       data=json.dumps(payload).encode("utf-8"),
+       headers={"Content-Type": "application/json"}
+   )
+   with urllib.request.urlopen(req) as resp:
+       result = json.loads(resp.read().decode("utf-8"))
+       print(result["choices"][0]["message"]["content"])
+   ```
+
 ### Comprehensive Local Model Routing Table & Alternative Presets
 
 All 21 model presets configured in your local environment are categorized below:

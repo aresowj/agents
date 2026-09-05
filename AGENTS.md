@@ -27,4 +27,5 @@ An OpenAI-compatible `llama.cpp` server is available locally at `http://localhos
 - **Fast / Medium Coding (8B - 9B)**: `qwen3.5-9b-deepseek-q8`, `qwen3.5-9b-q8`, `omnicoder-9b-q6`, `lfm2-8b-a1b-q8`.
 - **Bulk / Lightweight (1.5B)**: `qwen2.5-coder-1.5b-q8`.
 
-Use local LLMs for offline work, quota conservation, or local inference scripts.
+#### Direct Invocation Pattern
+Antigravity interacts directly with `llama.cpp` using HTTP requests (`curl` or Python via `run_command`) against `http://localhost:8080/v1/chat/completions` with zero changes required to global CLI settings (`settings.json`). The orchestrator generates scoped prompts, executes the query locally, parses the response, applies the edits to the workspace, and runs local test suites.
