@@ -43,15 +43,17 @@ When running offline, conserving cloud rate limits, or delegating local code exe
 > Unless a task requires a different specialist, the orchestrator SHOULD route local coding, debugging, test fixing, and multi-file code editing tasks to **`devstral-small-2-24b-q4` by default**. Built specifically for agentic loops (68.0% SWE-bench Verified), it excels at repo navigation, unified diffs, tool calling, and test verification.
 > *The orchestrator remains empowered to route to other models when task characteristics demand it* (e.g., deep mathematical reasoning, fast regex filtering, or specialized logic).
 
-### Local Model Routing Table
+### Comprehensive Local Model Routing Table & Alternative Presets
 
-| Tier / Category | Primary Model | Alternative Presets | Strengths & Dispatch Scenario |
+All 21 model presets configured in your local environment are categorized below:
+
+| Tier / Task Type | Default Model | Alternative Presets Available | Dispatch Scenario & Trade-offs |
 | :--- | :--- | :--- | :--- |
-| **Default Coding Agent** | **`devstral-small-2-24b-q4`** *(Default)* | `DavidAU/Qwen3.8-27B-TURBO-...` | **Autonomous coding loops, bug fixing, test writing, refactoring.** Tailored for tool use, git diff application, and repository editing. |
-| **Deep Reasoning & Architecture** | `qwen2.5-coder-32b-q5` | `qwen3.8-27b-ud-q6`, `qwen3.6-27b-q6` | Complex algorithmic reasoning, deep math/logic, large system architecture planning, theoretical design. |
-| **Logic & Root-Cause Analysis** | `ministral-14b-reasoning-q4` | `ministral-8b-reasoning-q4` | Chain-of-thought diagnostics, edge-case vulnerability discovery, root-cause verification for elusive bugs. |
-| **Fast / Scoped Coding** | `qwen3.5-9b-deepseek-q8` | `qwen3.5-9b-q8`, `omnicoder-9b-q6`, `lfm2-8b-a1b-q8` | Fast routine functions, boilerplate generation, unit test stubs, high-throughput editing with low VRAM. |
-| **Lightweight Recon & Formatting** | `qwen2.5-coder-1.5b-q8` | — | Regex crafting, log parsing, token-efficient repetitive text transformations. |
+| **1. Default Coding Agent & Multi-File Loops** | **`devstral-small-2-24b-q4`** *(Default)* | • `DavidAU/Qwen3.8-27B-TURBO-...`<br>• `qwen3.8-27b-ud-q6`<br>• `qwen3.8-27b-ud-q4`<br>• `qwen3.6-27b-q6`<br>• `qwen3.6-27b-q4` | **Autonomous coding loops, bug fixing, test authoring, refactoring.** Tailored for tool use, unified diff application, and repository editing. Use Qwen 3.8/3.6 alternatives for high-throughput or uncensored code modification. |
+| **2. Deep Algorithmic Reasoning & Architecture** | `qwen2.5-coder-32b-q5` | • `gemma-4-26b-a4b-q6`<br>• `gemma-4-26b-a4b-q5`<br>• `gemma-4-26b-a4b-q4`<br>• `gpt-oss-20b-mxfp4` | Complex algorithmic reasoning, state machines, theoretical software architecture, formal contracts, and strict API specifications. |
+| **3. Chain-of-Thought Root-Cause Analysis** | `ministral-14b-reasoning-q4` | • `ministral-8b-reasoning-q4`<br>• `qwen3.5-9b-deepseek-q8` | Step-by-step diagnostic reasoning, subtle race condition analysis, regression debugging, edge-case vulnerability discovery. |
+| **4. Fast / Scoped Coding & Boilerplate** | `qwen3.5-9b-deepseek-q8` | • `omnicoder-9b-q6`<br>• `qwen3.5-9b-q8`<br>• `qwen3.5-9b-q4`<br>• `lfm2-24b-a2b-q4`<br>• `lfm2-8b-a1b-q8` | Fast routine function drafting, documentation comments, unit test stubs, high-throughput editing with low VRAM footprint. |
+| **5. High-Throughput Parsing & Text Transforms** | `qwen2.5-coder-1.5b-q8` | • `lfm2-8b-a1b-q8` | Regex generation, log parsing, compiler output filtering, and token-efficient repetitive text transforms. |
 
 ---
 
@@ -67,15 +69,20 @@ Does the task require native Antigravity subagents (`invoke_subagent`)?
 └── NO (Local batch task, local inference script, offline, or quota saving)
     └── Route to local `llama.cpp` API (http://localhost:8080/v1):
         ├── General coding / bug fixing / agentic edit loop?
-        │   └── ★ DEFAULT: `devstral-small-2-24b-q4`
+        │   ├── ★ DEFAULT: `devstral-small-2-24b-q4`
+        │   └── Alternatives: `DavidAU/Qwen3.8-27B...`, `qwen3.8-27b-ud-q6/q4`, `qwen3.6-27b-q6/q4`
         ├── Complex algorithms or mathematical logic?
-        │   └── `qwen2.5-coder-32b-q5` or `qwen3.8-27b-ud-q6`
+        │   ├── Primary: `qwen2.5-coder-32b-q5`
+        │   └── Alternatives: `gemma-4-26b-a4b-q6/q5/q4`, `gpt-oss-20b-mxfp4`
         ├── Chain-of-thought root-cause debugging?
-        │   └── `ministral-14b-reasoning-q4`
+        │   ├── Primary: `ministral-14b-reasoning-q4`
+        │   └── Alternatives: `ministral-8b-reasoning-q4`, `qwen3.5-9b-deepseek-q8`
         ├── Fast function boilerplate / simple scripts?
-        │   └── `qwen3.5-9b-deepseek-q8` or `omnicoder-9b-q6`
+        │   ├── Primary: `qwen3.5-9b-deepseek-q8`
+        │   └── Alternatives: `omnicoder-9b-q6`, `qwen3.5-9b-q8/q4`, `lfm2-24b-a2b-q4`, `lfm2-8b-a1b-q8`
         └── Fast text extraction / regex parsing?
-            └── `qwen2.5-coder-1.5b-q8`
+            ├── Primary: `qwen2.5-coder-1.5b-q8`
+            └── Alternative: `lfm2-8b-a1b-q8`
 ```
 
 ---
