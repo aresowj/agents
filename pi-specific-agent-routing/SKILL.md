@@ -272,3 +272,4 @@ Systematic root-cause debugging:
 - `lens_diagnostics`: Code quality checks
 - `lsp_diagnostics`: Language server diagnostics
 - `lsp_diagnostics`: Language server diagnostics
+- `lsp_diagnostics`: Language server diagnostics
