@@ -38,6 +38,7 @@ Pi provides native subagent delegation via the `subagent` tool with extensive ca
 Pi can interact with local LLM engines via the `bg_run_pi_attested` tool for evidence-oriented direct Pi spawns, or through direct HTTP API calls.
 
 ### Local LLM Endpoint Details
+
 - **Base URL**: `http://localhost:8080/v1` (OpenAI-compatible REST API)
 - **Models Endpoint**: `GET http://localhost:8080/v1/models`
 - **Completions Endpoint**: `POST http://localhost:8080/v1/chat/completions`
@@ -96,6 +97,7 @@ When dispatching work to a subagent:
 ### Example Dispatch Patterns
 
 #### Parallel Implementation with Review
+
 ```javascript
 // Orchestrate parallel implementation and review
 const results = await runs.all([
@@ -130,6 +132,7 @@ const results = await runs.all([
 ```
 
 #### Async Workflow with Background Processing
+
 ```javascript
 // Start async workflow
 const backgroundTask = subagent({
@@ -149,6 +152,7 @@ const result = await bg_result({ taskId: backgroundTask.id });
 ```
 
 #### Local LLM Integration Example
+
 ```javascript
 // Use local LLM for offline processing
 const response = await fetch('http://localhost:8080/v1/chat/completions', {
@@ -167,6 +171,7 @@ const data = await response.json();
 ## 5. Workflow Patterns
 
 ### Incremental Implementation
+
 Use `todo` for complex multi-step work:
 
 1. Create tasks: `todo action=create subject="Research authentication options"`
@@ -175,6 +180,7 @@ Use `todo` for complex multi-step work:
 4. Complete tasks: `todo action=update id=1 status=completed`
 
 ### Context Engineering
+
 Use `ctx_index`, `ctx_search`, and `ctx_execute` for large-scale analysis:
 
 ```javascript
@@ -198,6 +204,7 @@ const stats = ctx_execute({
 ```
 
 ### Debugging Workflows
+
 Systematic root-cause debugging:
 
 1. Reproduce issue
@@ -209,6 +216,7 @@ Systematic root-cause debugging:
 ## 6. Best Practices
 
 ### When to Use Subagents
+
 - **Good**: Independent, bounded tasks with clear acceptance criteria
 - **Good**: Parallelizable work (implementation, testing, review)
 - **Good**: Offloading research or exploration
@@ -217,18 +225,21 @@ Systematic root-cause debugging:
 - **Avoid**: Tasks requiring continuous parent judgment
 
 ### Model Selection
+
 - **Start lightweight**: Use smaller models for simple tasks
 - **Escalate thoughtfully**: Move to larger models only when needed
 - **Match capability to task**: Don't over-provision or under-provision
 - **Consider cost**: Balance quality with usage constraints
 
 ### Error Handling
+
 - Always include error handling in workflows
 - Use `try/catch` blocks for subagent calls
 - Implement retry logic for transient failures
 - Provide fallback mechanisms
 
 ### Monitoring
+
 - Track subagent progress with status checks
 - Set appropriate timeouts
 - Monitor tool budgets and usage
@@ -237,6 +248,7 @@ Systematic root-cause debugging:
 ## 7. Pi-Specific Tools
 
 ### Core Tools
+
 - `subagent`: Native subagent delegation
 - `bg_run`: Background task execution
 - `bg_wait`: Wait for background tasks
@@ -245,6 +257,7 @@ Systematic root-cause debugging:
 - `todo`: Task list management
 
 ### Context Tools
+
 - `ctx_execute`: Sandboxed code execution
 - `ctx_execute_file`: File-based code execution
 - `ctx_index`: Content indexing
@@ -252,8 +265,11 @@ Systematic root-cause debugging:
 - `ctx_batch_execute`: Parallel command execution
 
 ### Utility Tools
+
 - `bg_run_pi_attested`: Evidence-oriented Pi spawns
 - `bg_status`: Task status inspection
 - `bg_logs`: Log retrieval
 - `lens_diagnostics`: Code quality checks
+- `lsp_diagnostics`: Language server diagnostics
+- `lsp_diagnostics`: Language server diagnostics
 - `lsp_diagnostics`: Language server diagnostics
