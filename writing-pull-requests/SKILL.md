@@ -9,7 +9,7 @@ description: Prepares focused, reviewable pull requests with clear titles, descr
 
 Inspect the repository's contribution guidance, PR template, branch policy, and checks before drafting. Keep the PR focused on one outcome. Split unrelated refactors, generated churn, drive-by formatting, and independent features into separate changes when practical.
 
-Before requesting review, inspect the diff against the intended base branch. Verify behavior, tests, documentation, migrations, compatibility, and security implications. Use a draft PR for early feedback or CI while the work is incomplete.
+Before pushing commits or requesting review, inspect the diff against the intended base branch and execute all test suites locally. Do not push changes and wait for remote CI to catch issues; always verify tests and linters locally first. Verify behavior, tests, documentation, migrations, compatibility, and security implications. Use a draft PR for early feedback or CI while the work is incomplete.
 
 ## Write the PR
 

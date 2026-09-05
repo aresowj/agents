@@ -1,12 +1,10 @@
 # Agent Workflow Framework
 
-A unified framework for agentic workflows, supporting Python and Go.
+A unified framework for agentic workflows and local development. This repository holds the centralized skills and rules for Google Antigravity and Pi Agent workflows.
 
 ## Features
-- **MCP Server**: Exposes tools for agents via Model Context Protocol.
-- **Supervisor Routing**: Uses `litellm` to route tasks to specific personas via JSON execution plans.
 - **Antigravity & Subagent Routing**: Optimizes agent delegation across Google Antigravity tiers (`pro`, `flash`, `flash_lite`) and local `llama.cpp` model presets.
-- **Testing rituals**: Enforces 80% minimum coverage via `pytest` and `testify`.
+- **Testing rituals**: Enforces 80% minimum coverage.
 - **PR Rituals**: Uses `gh` CLI for creating PRs and writing descriptions.
 
 ## Repository Structure
@@ -18,13 +16,12 @@ Local Pi agent settings and package list for easy reinstallation on new environm
 - `models-store.json` - Model configuration and provider settings
 - `auth.json` - Provider authentication configuration
 
-### .agents/ - User Skills and Agents
-Custom skills and agent definitions used across projects.
+### Skills
+Custom skills and agent definitions used across projects, located at the root of the repository.
 
 ## Setup
-1. `pip install -e .[dev]`
-2. `pre-commit install`
-3. Run the MCP server: `python -m mcp_server.server`
+1. Copy skills from the root directory to your local project's `.agents/skills/` directory, or symlink them, to use with Google Antigravity.
+2. Ensure you have the `gh` CLI installed for PR rituals.
 
 ### Pi Agent Setup (New Environment)
 1. Install Pi packages:
