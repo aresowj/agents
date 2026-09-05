@@ -271,3 +271,4 @@ Systematic root-cause debugging:
 - `bg_logs`: Log retrieval
 - `lens_diagnostics`: Code quality checks
 - `lsp_diagnostics`: Language server diagnostics
+- `lsp_diagnostics`: Language server diagnostics
