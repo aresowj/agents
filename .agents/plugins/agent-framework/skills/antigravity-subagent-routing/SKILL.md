@@ -49,7 +49,7 @@ All 21 model presets configured in your local environment are categorized below:
 
 | Tier / Task Type | Default Model | Alternative Presets Available | Dispatch Scenario & Trade-offs |
 | :--- | :--- | :--- | :--- |
-| **1. Default Coding Agent & Multi-File Loops** | **`devstral-small-2-24b-q4`** *(Default)* | • `DavidAU/Qwen3.8-27B-TURBO-...`<br>• `qwen3.8-27b-ud-q6`<br>• `qwen3.8-27b-ud-q4`<br>• `qwen3.6-27b-q6`<br>• `qwen3.6-27b-q4` | **Autonomous coding loops, bug fixing, test authoring, refactoring.** Tailored for tool use, unified diff application, and repository editing. Use Qwen 3.8/3.6 alternatives for high-throughput or uncensored code modification. |
+| **1. Default Coding Agent & Multi-File Loops** | **`devstral-small-2-24b-q4`** *(Default)* | • `DavidAU/Qwen3.8-27B-TURBO-Fable-Cold-Fusion-735-882-Heretic-Uncensored-NEO-CODER-MAX-MTP-GGUF:Q4_K_M`<br>• `qwen3.8-27b-ud-q6`<br>• `qwen3.8-27b-ud-q4`<br>• `qwen3.6-27b-q6`<br>• `qwen3.6-27b-q4` | **Autonomous coding loops, bug fixing, test authoring, refactoring.** Tailored for tool use, unified diff application, and repository editing. Use Qwen 3.8/3.6 alternatives for high-throughput or uncensored code modification. |
 | **2. Deep Algorithmic Reasoning & Architecture** | `qwen2.5-coder-32b-q5` | • `gemma-4-26b-a4b-q6`<br>• `gemma-4-26b-a4b-q5`<br>• `gemma-4-26b-a4b-q4`<br>• `gpt-oss-20b-mxfp4` | Complex algorithmic reasoning, state machines, theoretical software architecture, formal contracts, and strict API specifications. |
 | **3. Chain-of-Thought Root-Cause Analysis** | `ministral-14b-reasoning-q4` | • `ministral-8b-reasoning-q4`<br>• `qwen3.5-9b-deepseek-q8` | Step-by-step diagnostic reasoning, subtle race condition analysis, regression debugging, edge-case vulnerability discovery. |
 | **4. Fast / Scoped Coding & Boilerplate** | `qwen3.5-9b-deepseek-q8` | • `omnicoder-9b-q6`<br>• `qwen3.5-9b-q8`<br>• `qwen3.5-9b-q4`<br>• `lfm2-24b-a2b-q4`<br>• `lfm2-8b-a1b-q8` | Fast routine function drafting, documentation comments, unit test stubs, high-throughput editing with low VRAM footprint. |
@@ -70,7 +70,7 @@ Does the task require native Antigravity subagents (`invoke_subagent`)?
     └── Route to local `llama.cpp` API (http://localhost:8080/v1):
         ├── General coding / bug fixing / agentic edit loop?
         │   ├── ★ DEFAULT: `devstral-small-2-24b-q4`
-        │   └── Alternatives: `DavidAU/Qwen3.8-27B...`, `qwen3.8-27b-ud-q6/q4`, `qwen3.6-27b-q6/q4`
+        │   └── Alternatives: `DavidAU/Qwen3.8-27B-TURBO-Fable-Cold-Fusion-735-882-Heretic-Uncensored-NEO-CODER-MAX-MTP-GGUF:Q4_K_M`, `qwen3.8-27b-ud-q6/q4`, `qwen3.6-27b-q6/q4`
         ├── Complex algorithms or mathematical logic?
         │   ├── Primary: `qwen2.5-coder-32b-q5`
         │   └── Alternatives: `gemma-4-26b-a4b-q6/q5/q4`, `gpt-oss-20b-mxfp4`
