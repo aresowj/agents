@@ -26,6 +26,12 @@ Custom skills and agent definitions used across projects.
 3. Run the MCP server: `python -m mcp_server.server`
 
 ### Pi Agent Setup (New Environment)
-1. Install Pi: `npm install -g @earendil-works/pi-coding-agent`
+1. Install Pi packages:
+```bash
+npm install -g \
+  @earendil-works/pi-coding-agent@latest \
+  @earendil-works/pi-server@latest \
+  @earendil-works/pi-client@latest
+```
 2. Copy `.pi/settings.json` to `~/.pi/agent/settings.json`
 3. Install packages: Run `pi install <package>` for each package listed in `.pi/packages.json`
