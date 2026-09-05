@@ -5,6 +5,7 @@ A unified framework for agentic workflows, supporting Python and Go.
 ## Features
 - **MCP Server**: Exposes tools for agents via Model Context Protocol.
 - **Supervisor Routing**: Uses `litellm` to route tasks to specific personas via JSON execution plans.
+- **Antigravity & Subagent Routing**: Optimizes agent delegation across Google Antigravity tiers (`pro`, `flash`, `flash_lite`) and local `llama.cpp` model presets.
 - **Testing rituals**: Enforces 80% minimum coverage via `pytest` and `testify`.
 - **PR Rituals**: Uses `gh` CLI for creating PRs and writing descriptions.
 
