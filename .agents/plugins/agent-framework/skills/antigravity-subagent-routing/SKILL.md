@@ -31,42 +31,51 @@ Antigravity provides native background subagent invocation via the `invoke_subag
 
 ## 2. Local LLMs Integration (`llama.cpp` / OpenAI API)
 
-When offline, preserving cloud quotas, or performing local batch tasks, Antigravity can interact directly with your local LLM engine via `http://localhost:8080/v1` (OpenAI-compatible REST API).
+When running offline, conserving cloud rate limits, or delegating local code execution, Antigravity can interact directly with your local LLM engine via `http://localhost:8080/v1` (OpenAI-compatible REST API).
 
 ### Local LLM Endpoint Details
 - **Base URL**: `http://localhost:8080/v1`
 - **Models Endpoint**: `GET http://localhost:8080/v1/models`
 - **Completions Endpoint**: `POST http://localhost:8080/v1/chat/completions`
 
-### Local Model Profiles & Capabilities
+### Default Coding Agent Directive
+> **Primary Default Coding Model**: `devstral-small-2-24b-q4`
+> Unless a task requires a different specialist, the orchestrator SHOULD route local coding, debugging, test fixing, and multi-file code editing tasks to **`devstral-small-2-24b-q4` by default**. Built specifically for agentic loops (68.0% SWE-bench Verified), it excels at repo navigation, unified diffs, tool calling, and test verification.
+> *The orchestrator remains empowered to route to other models when task characteristics demand it* (e.g., deep mathematical reasoning, fast regex filtering, or specialized logic).
 
-Your local `llama.cpp` runtime maintains 21 configured model presets spanning various parameter sizes and quantization levels:
+### Local Model Routing Table
 
-| Category / Tier | Available Local Presets | Strengths & Best Use Cases |
-| :--- | :--- | :--- |
-| **Heavy Coding & Architecture** | • `DavidAU/Qwen3.8-27B-TURBO-Fable-Cold-Fusion-735-882-Heretic-Uncensored-NEO-CODER-MAX-MTP-GGUF:Q4_K_M`<br>• `qwen3.8-27b-ud-q6`<br>• `qwen3.8-27b-ud-q4`<br>• `qwen3.6-27b-q6`<br>• `qwen3.6-27b-q4`<br>• `qwen2.5-coder-32b-q5` | Complex coding, deep logic, full file refactoring, reasoning, test authoring. |
-| **Generalist & Multi-Domain** | • `gemma-4-26b-a4b-q6`<br>• `gemma-4-26b-a4b-q5`<br>• `gemma-4-26b-a4b-q4`<br>• `devstral-small-2-24b-q4`<br>• `lfm2-24b-a2b-q4`<br>• `gpt-oss-20b-mxfp4` | Technical analysis, architectural reviews, structured data transformation, documentation. |
-| **Reasoning Specialists** | • `ministral-14b-reasoning-q4`<br>• `ministral-8b-reasoning-q4` | Chain-of-thought verification, test edge-case discovery, bug root-cause analysis. |
-| **Fast / Medium Coding** | • `qwen3.5-9b-deepseek-q8`<br>• `qwen3.5-9b-q8`<br>• `qwen3.5-9b-q4`<br>• `omnicoder-9b-q6`<br>• `lfm2-8b-a1b-q8` | Rapid single-function implementation, docstrings, boilerplate creation, unit test drafting. |
-| **Ultra-Lightweight / Bulk** | • `qwen2.5-coder-1.5b-q8` | Fast regex generation, log filtering, token-efficient repetitive text transformations. |
+| Tier / Category | Primary Model | Alternative Presets | Strengths & Dispatch Scenario |
+| :--- | :--- | :--- | :--- |
+| **Default Coding Agent** | **`devstral-small-2-24b-q4`** *(Default)* | `DavidAU/Qwen3.8-27B-TURBO-...` | **Autonomous coding loops, bug fixing, test writing, refactoring.** Tailored for tool use, git diff application, and repository editing. |
+| **Deep Reasoning & Architecture** | `qwen2.5-coder-32b-q5` | `qwen3.8-27b-ud-q6`, `qwen3.6-27b-q6` | Complex algorithmic reasoning, deep math/logic, large system architecture planning, theoretical design. |
+| **Logic & Root-Cause Analysis** | `ministral-14b-reasoning-q4` | `ministral-8b-reasoning-q4` | Chain-of-thought diagnostics, edge-case vulnerability discovery, root-cause verification for elusive bugs. |
+| **Fast / Scoped Coding** | `qwen3.5-9b-deepseek-q8` | `qwen3.5-9b-q8`, `omnicoder-9b-q6`, `lfm2-8b-a1b-q8` | Fast routine functions, boilerplate generation, unit test stubs, high-throughput editing with low VRAM. |
+| **Lightweight Recon & Formatting** | `qwen2.5-coder-1.5b-q8` | — | Regex crafting, log parsing, token-efficient repetitive text transformations. |
 
 ---
 
 ## 3. Hybrid Routing Decision Tree
 
 ```
-Does the task require cloud tool-use / subagent spawning inside Antigravity?
-├── YES → Use native `invoke_subagent`
+Does the task require native Antigravity subagents (`invoke_subagent`)?
+├── YES → Use Antigravity subagent tier:
 │   ├── Is it multi-file or high-risk? → `Model: "pro"`
 │   ├── Is it a single-file edit or standard test? → `Model: "flash"`
-│   └── Is it pure read-only research/grep? → `Model: "flash_lite"` with `research` subagent
+│   └── Is it pure read-only research/grep? → `Model: "flash_lite"` (`research`)
 │
-└── NO (Offline, batch task, local inference script, or quota saving)
+└── NO (Local batch task, local inference script, offline, or quota saving)
     └── Route to local `llama.cpp` API (http://localhost:8080/v1):
-        ├── Deep reasoning / cross-file code → Qwen 27B/32B or Devstral 24B
-        ├── Chain-of-thought analysis / logic debugging → Ministral 14B / 8B Reasoning
-        ├── Standard function writing / editing → Qwen3.5 9B or OmniCoder 9B
-        └── Fast text extraction / formatting → Qwen2.5-Coder 1.5B
+        ├── General coding / bug fixing / agentic edit loop?
+        │   └── ★ DEFAULT: `devstral-small-2-24b-q4`
+        ├── Complex algorithms or mathematical logic?
+        │   └── `qwen2.5-coder-32b-q5` or `qwen3.8-27b-ud-q6`
+        ├── Chain-of-thought root-cause debugging?
+        │   └── `ministral-14b-reasoning-q4`
+        ├── Fast function boilerplate / simple scripts?
+        │   └── `qwen3.5-9b-deepseek-q8` or `omnicoder-9b-q6`
+        └── Fast text extraction / regex parsing?
+            └── `qwen2.5-coder-1.5b-q8`
 ```
 
 ---
