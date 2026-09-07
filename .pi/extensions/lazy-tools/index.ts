@@ -22,6 +22,14 @@ import * as path from "node:path";
 // so deferring here would be undone. They stay eager (~1k tokens total).
 const LAZY_EXACT = new Set([
   "subagent",
+  // MCP gateway (pi-mcp-adapter): typically no servers connected; activate on demand.
+  "mcp",
+  "mcpScript",
+  // Web research group: large schemas, defer until a task needs web access.
+  "web_search",
+  "source_check",
+  "fetch_content",
+  "get_search_content",
 ]);
 const LAZY_PREFIXES: string[] = [
   // @alasano/pi-linear: deferred via its own tool-settings.json (seeded below);
@@ -75,9 +83,9 @@ export default function (pi: ExtensionAPI) {
     name: "search_tools",
     label: "Search Tools",
     description:
-      "Search for and activate tools relevant to a task. Hidden capability groups include: Linear issue tracking (linear_*), subagent delegation, background tasks (bg_*), workflows, and fusion multi-model reasoning. Pass names to activate exact tool names, or query to keyword-search all registered tools.",
+      "Search for and activate tools relevant to a task. Hidden capability groups include: Linear issue tracking (linear_*), subagent delegation, background tasks (bg_*), fusion multi-model reasoning, the MCP gateway (mcp/mcpScript), and web research (web_search/source_check/fetch_content/get_search_content). Workflow tools stay always available. Pass names to activate exact tool names, or query to keyword-search all registered tools.",
     promptSnippet:
-      "Tools in the hidden groups above are not active until you call search_tools; use it when a task needs Linear issues, subagent delegation/background tasks/workflows, or fusion reasoning.",
+      "Tools in the hidden groups above are not active until you call search_tools; use it when a task needs Linear issues, background/fusion work, web research (web_search and friends), or MCP gateway tools. Workflow tools stay always available.",
     parameters: Type.Object({
       query: Type.Optional(
         Type.String({ description: "Capability or task to keyword-search for" }),
@@ -147,14 +155,23 @@ export default function (pi: ExtensionAPI) {
     const allNames = pi.getAllTools().map((t) => t.name);
     seedLinearSettings(allNames);
 
-    const eager = readOverride();
-    const lazyNames = new Set(
-      allNames.filter((n) => isLazyName(n) && !eager.some((p) => n.startsWith(p))),
-    );
-    if (lazyNames.size === 0) return;
+    // Run the filter on a macrotask so it executes AFTER every other extension's
+    // synchronous session_start handlers. Several extensions force-re-add their own
+    // tools in their own session_start handlers (pi-background-tasks for bg_*/fusion_*
+    // via delegate-extension.ts, pi-dynamic-workflows for workflow*); running last
+    // makes this filter the final word on the startup active set. The first API
+    // request happens well after this macrotask fires.
+    setTimeout(() => {
+      const names = pi.getAllTools().map((t) => t.name);
+      const eager = readOverride();
+      const lazyNames = new Set(
+        names.filter((n) => isLazyName(n) && !eager.some((p) => n.startsWith(p))),
+      );
+      if (lazyNames.size === 0) return;
 
-    const initial = pi.getActiveTools().filter((name) => !lazyNames.has(name));
-    pi.setActiveTools([...new Set([...initial, "search_tools"])]);
-    console.error(`[lazy-tools] deferred ${lazyNames.size} tools to search_tools (eager overrides: ${eager.join(", ") || "none"})`);
+      const initial = pi.getActiveTools().filter((name) => !lazyNames.has(name));
+      pi.setActiveTools([...new Set([...initial, "search_tools"])]);
+      console.error(`[lazy-tools] deferred ${lazyNames.size} tools to search_tools (eager overrides: ${eager.join(", ") || "none"})`);
+    }, 0);
   });
 }
