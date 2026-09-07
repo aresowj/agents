@@ -12,7 +12,13 @@
     "npm:@plannotator/pi-extension",
     "npm:@narumitw/pi-goal",
     "npm:pi-simplify",
-    "npm:billion-context"
+    "npm:billion-context",
+    "npm:@alasano/pi-linear",
+    "npm:pi-localllm-provider",
+    "npm:@narumitw/pi-usage",
+    "npm:pi-token-speed",
+    "npm:@quintinshaw/pi-dynamic-workflows",
+    "npm:pi-lazy-extensions"
   ],
   "install": "For each npm package: pi install <package-name>. For git: pi install git:<url>"
 }

@@ -15,6 +15,7 @@ Local Pi agent settings and package list for easy reinstallation on new environm
 - `packages.json` - List of installed Pi packages with install instructions
 - `models-store.json` - Model configuration and provider settings
 - `auth.json` - Provider authentication configuration
+- `extensions/` - Local pi extensions (copy to `~/.pi/agent/extensions/`; e.g. `lazy-tools`, which defers heavyweight tool groups behind a `search_tools` loader)
 
 ### Skills
 Custom skills and agent definitions used across projects, located at the root of the repository.
@@ -33,3 +34,4 @@ npm install -g \
 ```
 2. Copy `.pi/settings.json` to `~/.pi/agent/settings.json`
 3. Install packages: Run `pi install <package>` for each package listed in `.pi/packages.json`
+4. Copy `.pi/extensions/` into `~/.pi/agent/extensions/` (local extensions, e.g. lazy-tools)
