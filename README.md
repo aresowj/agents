@@ -1,37 +1,46 @@
-# Agent Workflow Framework
+# Agent Workflow Skills
 
-A unified framework for agentic workflows and local development. This repository holds the centralized skills and rules for Google Antigravity and Pi Agent workflows.
+A small collection of portable skills for task orchestration across Codex, Google Antigravity, and Pi, plus reusable engineering guidance and Pi configuration.
 
-## Features
-- **Antigravity & Subagent Routing**: Optimizes agent delegation across Google Antigravity tiers (`pro`, `flash`, `flash_lite`) and local `llama.cpp` model presets.
-- **Testing rituals**: Enforces 80% minimum coverage.
-- **PR Rituals**: Uses `gh` CLI for creating PRs and writing descriptions.
+## Skills
 
-## Repository Structure
+| Skill | Purpose |
+|---|---|
+| `codex-subagent-routing` | Bounded delegation and result integration in Codex. |
+| `antigravity-subagent-routing` | Native Antigravity delegation and optional local inference. |
+| `pi-specific-agent-routing` | Pi subagents, background work, and runtime model selection. |
+| `software-architecture` | Architecture decisions, boundaries, tradeoffs, and ADRs. |
+| `writing-code-comments` | Intent-focused comments and public API documentation. |
+| `writing-pull-requests` | Reviewable PR descriptions and validation evidence. |
 
-### .pi/ - Pi Coding Agent Configuration
-Local Pi agent settings and package list for easy reinstallation on new environments:
-- `settings.json` - Pi agent configuration (theme, default provider/model, package list)
-- `packages.json` - List of installed Pi packages with install instructions
-- `models-store.json` - Model configuration and provider settings
-- `auth.json` - Provider authentication configuration
-- `extensions/` - Local pi extensions (copy to `~/.pi/agent/extensions/`; e.g. `lazy-tools`, which defers heavyweight tool groups behind a `search_tools` loader)
+The routing skills share durable principles but keep platform-specific tool discovery and execution separate. They intentionally avoid pinned model catalogs: use the models and schemas exposed by the active runtime.
 
-### Skills
-Custom skills and agent definitions used across projects, located at the root of the repository.
+## Pi configuration
 
-## Setup
-1. Copy skills from the root directory to your local project's `.agents/skills/` directory, or symlink them, to use with Google Antigravity.
-2. Ensure you have the `gh` CLI installed for PR rituals.
+The `.pi/` directory contains settings, a package manifest, and local extensions for restoring a Pi environment. The `lazy-tools` extension keeps heavyweight capability groups hidden until searched and activated.
 
-### Pi Agent Setup (New Environment)
-1. Install Pi packages:
-```bash
-npm install -g \
-  @earendil-works/pi-coding-agent@latest \
-  @earendil-works/pi-server@latest \
-  @earendil-works/pi-client@latest
+Review `.pi/auth.json` before sharing or restoring configuration. Never commit live credentials.
+
+## Install repository skills
+
+Copy or symlink the desired root-level skill directories into the skill directory used by the target agent. Install only the skills relevant to that environment; the three routing skills are alternatives, not a bundle that should all activate in one runtime.
+
+External skills installed outside this repository are pinned in `EXTERNAL_SKILLS.md`.
+
+## Validate changes
+
+Run the local skill validator for every root-level skill directory, then run the repository hooks:
+
+```powershell
+$validator = 'C:\Users\areso\.codex\skills\.system\skill-creator\scripts\quick_validate.py'
+
+Get-ChildItem -Directory | ForEach-Object {
+  if (Test-Path (Join-Path $_.FullName 'SKILL.md')) {
+    python $validator $_.FullName
+  }
+}
+
+pre-commit run --all-files
 ```
-2. Copy `.pi/settings.json` to `~/.pi/agent/settings.json`
-3. Install packages: Run `pi install <package>` for each package listed in `.pi/packages.json`
-4. Copy `.pi/extensions/` into `~/.pi/agent/extensions/` (local extensions, e.g. lazy-tools)
+
+CI runs the repository hooks on pull requests and changes to `main`.

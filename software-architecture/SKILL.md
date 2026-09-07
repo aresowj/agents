@@ -55,8 +55,6 @@ Use the following catalog as a shortlist, not a default. Describe each candidate
 
 For every selected pattern, name the simpler alternative, why it was rejected, coupling introduced, failure modes, operational burden, migration path, and how the decision can be reversed or replaced later.
 
-For every pattern, name the alternative, why it was rejected, coupling introduced, failure modes, and how it can be changed later.
-
 ## Make a decision record
 
 Use this compact ADR or design-review structure:
