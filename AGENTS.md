@@ -1,31 +1,22 @@
-# Agent Guidelines & Workflow Rules
+# Repository Guidelines
 
-## Local Testing Before Every Push
-- **Mandatory Local Testing**: Before every `git push` or Pull Request creation, you MUST run all relevant test suites and linters locally first (e.g., `python -m pytest`, `go test ./...`, `ruff check .`).
-- **Never Rely on CI as a First Check**: Do NOT push untested changes or incremental fixes just to wait for remote CI to tell you if they pass. Always verify test outcomes and coverage locally beforehand.
+This repository stores portable agent skills and Pi configuration. Keep instructions concise, environment-specific where necessary, and resistant to tool or model churn.
 
-## Antigravity (Google / Gemini) Agent & Subagent Routing
+## Skill changes
 
-When working within Google Antigravity (AGY / Antigravity 2.0 / CLI), follow these rules for model orchestration and delegation:
+- Every skill lives in a root-level directory with a `SKILL.md` whose frontmatter `name` matches the directory name.
+- Descriptions must say what the skill does and when it should activate. Avoid catch-all language that routes unrelated requests into a skill.
+- Put durable decisions and non-obvious constraints in skills. Do not copy model catalogs, benchmark claims, or tool schemas that the active runtime can expose directly.
+- Keep authorization boundaries explicit. Delegation never grants a subagent broader edit, network, or external-mutation permission than the parent received.
+- Prefer runtime capability discovery over guessed tool names or parameters.
+- Avoid overlap: extend the owning skill or remove the superseded skill instead of maintaining two near-duplicates.
 
-### 1. Orchestrator Tier
-- The primary orchestrator should be the strongest available reasoning model (e.g. **Gemini Pro** or **Claude Opus**).
-- Avoid using Flash models as top-level orchestrators for non-trivial, multi-step workflows.
+## Verification
 
-### 2. Antigravity Subagent Dispatch (`invoke_subagent`)
-Use the `Model` argument when spawning subagents:
-- **`pro`**: Complex implementations, multi-file refactoring, database migrations, architectural changes, or tricky integration test failures.
-- **`flash`**: Single-file changes, scoped bug fixes with identified root causes, simple unit tests, localization, and lint fixes.
-- **`flash_lite`**: Read-only codebase exploration, regex/grep searches, and file scanning (use `TypeName: "research"` with write tools disabled).
-- **`inherit`**: Natural continuation of the orchestrator's immediate reasoning path.
+Before pushing or opening a pull request:
 
-### 3. Local LLMs Integration (`llama.cpp`)
-An OpenAI-compatible `llama.cpp` server is available locally at `http://localhost:8080/v1` (with 21 presets configured):
-- **Default Coding Agent**: **`devstral-small-2-24b-q4`** (Mistral 24B, 68% SWE-bench Verified). Use this as the **default** model for autonomous local coding, multi-file edits, bug fixes, and test authoring. The orchestrator may route to other models when specific trade-offs warrant it.
-- **Deep Algorithmic & Theoretical Coding**: `qwen2.5-coder-32b-q5`, `qwen3.8-27b-ud-q6`, `qwen3.6-27b-q6`, or `DavidAU/Qwen3.8-27B-TURBO-Fable-Cold-Fusion-735-882-Heretic-Uncensored-NEO-CODER-MAX-MTP-GGUF:Q4_K_M`.
-- **Reasoning Specialists**: `ministral-14b-reasoning-q4`, `ministral-8b-reasoning-q4`.
-- **Fast / Medium Coding (8B - 9B)**: `qwen3.5-9b-deepseek-q8`, `qwen3.5-9b-q8`, `omnicoder-9b-q6`, `lfm2-8b-a1b-q8`.
-- **Bulk / Lightweight (1.5B)**: `qwen2.5-coder-1.5b-q8`.
+1. Run the local skill validator against every root-level skill directory.
+2. Run `pre-commit run --all-files`.
+3. Inspect the complete diff for stale references, accidental files, secrets, and mismatched documentation.
 
-#### Direct Invocation Pattern
-Antigravity interacts directly with `llama.cpp` using HTTP requests (`curl` or Python via `run_command`) against `http://localhost:8080/v1/chat/completions` with zero changes required to global CLI settings (`settings.json`). The orchestrator generates scoped prompts, executes the query locally, parses the response, applies the edits to the workspace, and runs local test suites.
+Never use CI as the first validation pass.
