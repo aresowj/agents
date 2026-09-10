@@ -1,14 +1,23 @@
 {
   "name": "@aresowj/pi-lazy-tools",
   "version": "0.1.0",
+  "type": "module",
   "description": "Dynamic on-demand loading for heavyweight Pi tools.",
   "keywords": ["pi-package", "pi-extension", "lazy-tools"],
   "files": ["extensions"],
+  "scripts": {
+    "test": "node --experimental-strip-types test/lazy-tools-rules.test.mjs"
+  },
   "pi": {
     "extensions": ["./extensions"]
   },
   "peerDependencies": {
     "@earendil-works/pi-coding-agent": "*",
     "typebox": "*"
+  },
+  "devDependencies": {
+    "@earendil-works/pi-coding-agent": "^0.85.1",
+    "@types/node": "^24.0.0",
+    "typebox": "^1.3.7"
   }
 }

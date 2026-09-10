@@ -17,6 +17,9 @@ env/
 dist/
 build/
 
+# Node
+node_modules/
+
 # Go
 bin/
 coverage.out
