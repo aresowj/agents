@@ -1,7 +1,8 @@
-import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
+import type { ExtensionAPI, ExtensionCommandContext } from "@earendil-works/pi-coding-agent";
 import { Type } from "typebox";
 import * as fs from "node:fs";
 import * as path from "node:path";
+import { deferredToolNames, matchesRule, unique, type LazyToolsConfig } from "./rules.ts";
 
 /**
  * lazy-tools — dynamic tool loading for pi.
@@ -12,36 +13,15 @@ import * as path from "node:path";
  * for the rest of the session (additive change, per docs "Dynamic Tool
  * Loading" in extensions.md).
  *
- * Per-project override: place `.pi/lazy-tools.json` in the project root:
- *   { "eager": ["linear_"] }        // keep these prefixes active at startup
+ * Configure defaults from Pi with `/lazy-tools`. Rules are stored in
+ * `~/.pi/agent/lazy-tools.json`:
+ *   { "eager": ["linear_"], "lazy": ["my_tool_"] }
+ * A project-local `.pi/lazy-tools.json` may add `eager`/`lazy` rules.
  */
 
-// Default lazy groups (tool name prefix or exact match).
-// NOTE: workflow/workflow_control are intentionally NOT listed —
-// @quintinshaw/pi-dynamic-workflows force-re-adds them on every session_start,
-// so deferring here would be undone. They stay eager (~1k tokens total).
-const LAZY_EXACT = new Set([
-  "subagent",
-  // MCP gateway (pi-mcp-adapter): typically no servers connected; activate on demand.
-  "mcp",
-  "mcpScript",
-  // Web research group: large schemas, defer until a task needs web access.
-  "web_search",
-  "source_check",
-  "fetch_content",
-  "get_search_content",
-]);
-const LAZY_PREFIXES: string[] = [
-  // @alasano/pi-linear: deferred via its own tool-settings.json (seeded below);
-  // also listed here as belt-and-suspenders for sessions before seeding applies.
-  "linear_",
-  "bg_",     // pi-subagents / pi-background tasks family
-  "fusion_", // multi-model fusion reasoning
-];
-
-function isLazyName(name: string): boolean {
-  return LAZY_EXACT.has(name) || LAZY_PREFIXES.some((p) => name.startsWith(p));
-}
+// Default lazy groups live in rules.ts. workflow/workflow_control intentionally stay eager:
+// pi-dynamic-workflows re-activates them during session_start.
+const GLOBAL_CONFIG_FILE = path.join(os.homedir(), ".pi", "agent", "lazy-tools.json");
 
 // @alasano/pi-linear re-activates all of its tools on session_start unless they
 // are listed in disabledTools. Seed that settings file ONCE (never overwrite an
@@ -63,19 +43,40 @@ function seedLinearSettings(allToolNames: string[]): void {
   }
 }
 
-// Project override may declare extra prefixes to keep eager (active).
-interface Override {
-  eager?: string[];
+function readConfigFile(file: string): LazyToolsConfig {
+  try {
+    const data: LazyToolsConfig = JSON.parse(fs.readFileSync(file, "utf8"));
+    return {
+      eager: Array.isArray(data.eager) ? unique(data.eager.filter((rule): rule is string => typeof rule === "string")) : [],
+      lazy: Array.isArray(data.lazy) ? unique(data.lazy.filter((rule): rule is string => typeof rule === "string")) : [],
+    };
+  } catch {
+    return { eager: [], lazy: [] };
+  }
 }
 
-function readOverride(): string[] {
-  try {
-    const file = path.join(process.cwd(), ".pi", "lazy-tools.json");
-    const data: Override = JSON.parse(fs.readFileSync(file, "utf8"));
-    return Array.isArray(data.eager) ? data.eager : [];
-  } catch {
-    return [];
-  }
+function readConfig(): Required<LazyToolsConfig> {
+  const global = readConfigFile(GLOBAL_CONFIG_FILE);
+  const project = readConfigFile(path.join(process.cwd(), ".pi", "lazy-tools.json"));
+  return {
+    eager: unique([...(global.eager ?? []), ...(project.eager ?? [])]),
+    lazy: unique([...(global.lazy ?? []), ...(project.lazy ?? [])]),
+  };
+}
+
+function writeGlobalConfig(config: Required<LazyToolsConfig>): void {
+  fs.mkdirSync(path.dirname(GLOBAL_CONFIG_FILE), { recursive: true });
+  fs.writeFileSync(GLOBAL_CONFIG_FILE, `${JSON.stringify(config, null, 2)}\n`);
+}
+
+function applyConfig(pi: ExtensionAPI) {
+  const config = readConfig();
+  const names = pi.getAllTools().map((tool) => tool.name);
+  const lazyNames = deferredToolNames(names, config);
+  const eagerNames = names.filter((name) => config.eager.some((rule) => matchesRule(name, rule)));
+  const active = pi.getActiveTools().filter((name) => !lazyNames.has(name));
+  pi.setActiveTools([...new Set([...active, ...eagerNames, "search_tools"])]);
+  return { config, lazyNames, eagerNames };
 }
 
 export default function (pi: ExtensionAPI) {
@@ -100,7 +101,7 @@ export default function (pi: ExtensionAPI) {
       const all = pi.getAllTools();
       const activeSet = new Set(pi.getActiveTools());
 
-      let matches: { name: string; desc: string; score: number }[] = [];
+      const matches: { name: string; desc: string; score: number }[] = [];
 
       if (params.names && params.names.length > 0) {
         for (const n of params.names) {
@@ -126,7 +127,7 @@ export default function (pi: ExtensionAPI) {
       if (matches.length === 0) {
         return {
           content: [{ type: "text", text: `No tools found for the given query/names.` }],
-          details: { matches: [] },
+          details: { matches, activated: [] },
         };
       }
 
@@ -138,9 +139,11 @@ export default function (pi: ExtensionAPI) {
         pi.setActiveTools([...new Set([...pi.getActiveTools(), ...toActivate])]);
       }
 
-      const lines = top.map(
-        (m) => `- ${m.name}${activeSet.has(m.name) ? " (already active)" : toActivate.includes(m.name) ? " [activated]" : ""}: ${m.desc}`,
-      );
+      const lines = top.map((m) => {
+        if (activeSet.has(m.name)) return `- ${m.name} (already active): ${m.desc}`;
+        if (toActivate.includes(m.name)) return `- ${m.name} [activated]: ${m.desc}`;
+        return `- ${m.name}: ${m.desc}`;
+      });
       return {
         content: [{
           type: "text",
@@ -151,27 +154,62 @@ export default function (pi: ExtensionAPI) {
     },
   });
 
+  pi.registerCommand("lazy-tools", {
+    description: "Show or change default active/lazy tool rules",
+    handler: async (args: string, ctx: ExtensionCommandContext) => {
+      const [action = "show", ...rules] = args.trim().split(/\s+/).filter(Boolean);
+      const global = readConfigFile(GLOBAL_CONFIG_FILE);
+      const next = {
+        eager: [...(global.eager ?? [])],
+        lazy: [...(global.lazy ?? [])],
+      };
+
+      if (action === "show") {
+        const { config, lazyNames, eagerNames } = applyConfig(pi);
+        ctx.ui.notify(
+          `Lazy-tools defaults (${GLOBAL_CONFIG_FILE})\nEager rules: ${config.eager.join(", ") || "none"}\nLazy rules: ${config.lazy.join(", ") || "none"}\nActive by rule: ${eagerNames.join(", ") || "none"}\nDeferred now: ${lazyNames.size}`,
+          "info",
+        );
+        return;
+      }
+
+      if (action === "reset") {
+        fs.rmSync(GLOBAL_CONFIG_FILE, { force: true });
+        const { lazyNames } = applyConfig(pi);
+        ctx.ui.notify(`Reset lazy-tools defaults; ${lazyNames.size} tools are deferred.`, "info");
+        return;
+      }
+
+      if (!['eager', 'lazy', 'default'].includes(action) || rules.length === 0) {
+        ctx.ui.notify("Usage: /lazy-tools [show|reset|eager <rule...>|lazy <rule...>|default <rule...>]", "warning");
+        return;
+      }
+
+      if (action === "eager") {
+        next.eager = unique([...next.eager, ...rules]);
+        next.lazy = next.lazy.filter((rule) => !rules.includes(rule));
+      } else if (action === "lazy") {
+        next.lazy = unique([...next.lazy, ...rules]);
+        next.eager = next.eager.filter((rule) => !rules.includes(rule));
+      } else {
+        next.eager = next.eager.filter((rule) => !rules.includes(rule));
+        next.lazy = next.lazy.filter((rule) => !rules.includes(rule));
+      }
+
+      writeGlobalConfig(next);
+      const { lazyNames } = applyConfig(pi);
+      ctx.ui.notify(`Saved lazy-tools defaults; ${lazyNames.size} tools are deferred.`, "info");
+    },
+  });
+
   pi.on("session_start", () => {
-    const allNames = pi.getAllTools().map((t) => t.name);
+    const allNames = pi.getAllTools().map((t: { name: string }) => t.name);
     seedLinearSettings(allNames);
 
-    // Run the filter on a macrotask so it executes AFTER every other extension's
-    // synchronous session_start handlers. Several extensions force-re-add their own
-    // tools in their own session_start handlers (pi-background-tasks for bg_*/fusion_*
-    // via delegate-extension.ts, pi-dynamic-workflows for workflow*); running last
-    // makes this filter the final word on the startup active set. The first API
-    // request happens well after this macrotask fires.
+    // Run the filter on a macrotask so it executes after other extensions'
+    // synchronous startup handlers and becomes the final active-tool set.
     setTimeout(() => {
-      const names = pi.getAllTools().map((t) => t.name);
-      const eager = readOverride();
-      const lazyNames = new Set(
-        names.filter((n) => isLazyName(n) && !eager.some((p) => n.startsWith(p))),
-      );
-      if (lazyNames.size === 0) return;
-
-      const initial = pi.getActiveTools().filter((name) => !lazyNames.has(name));
-      pi.setActiveTools([...new Set([...initial, "search_tools"])]);
-      console.error(`[lazy-tools] deferred ${lazyNames.size} tools to search_tools (eager overrides: ${eager.join(", ") || "none"})`);
+      applyConfig(pi);
     }, 0);
   });
 }
