@@ -1,0 +1,18 @@
+{
+  "name": "pi-lazy-tools-custom",
+  "version": "1.0.0",
+  "description": "Custom lazy-tools pi extension — dynamic tool loading for heavy capability groups",
+  "keywords": ["pi-package", "pi-extension", "lazy-tools"],
+  "main": "extensions/lazy-tools/index.ts",
+  "pi": {
+    "extensions": ["extensions"]
+  },
+  "dependencies": {
+    "@earendil-works/pi-coding-agent": "*",
+    "typebox": "*"
+  },
+  "peerDependencies": {
+    "@earendil-works/pi-coding-agent": "*",
+    "typebox": "*"
+  }
+}

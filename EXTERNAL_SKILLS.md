@@ -21,6 +21,38 @@ This file records skills installed outside this repository so the shared Codex s
   - `security-best-practices` from `skills/.curated/security-best-practices`
   - `security-threat-model` from `skills/.curated/security-threat-model`
   - `playwright` from `skills/.curated/playwright`
+  - `pi-lazy-tools-custom` from `skills/pi-lazy-tools-custom` (local package)
+
+### addyosmani Agent Skills
+
+- Repository: `https://github.com/addyosmani/agent-skills.git`
+- Ref: `d2c37ef6225dd8726cdd369a8030307f48592d26`
+- Skills:
+  - `api-and-interface-design` from `skills/api-and-interface-design`
+  - `browser-testing-with-devtools` from `skills/browser-testing-with-devtools`
+  - `ci-cd-and-automation` from `skills/ci-cd-and-automation`
+  - `code-review-and-quality` from `skills/code-review-and-quality`
+  - `code-simplification` from `skills/code-simplification`
+  - `constraint-driven-development` from `skills/constraint-driven-development`
+  - `context-engineering` from `skills/context-engineering`
+  - `deprecation-and-migration` from `skills/deprecation-and-migration`
+  - `documentation-and-adrs` from `skills/documentation-and-adrs`
+  - `doubt-driven-development` from `skills/doubt-driven-development`
+  - `frontend-ui-engineering` from `skills/frontend-ui-engineering`
+  - `git-workflow-and-versioning` from `skills/git-workflow-and-versioning`
+  - `idea-refine` from `skills/idea-refine`
+  - `interview-me` from `skills/interview-me`
+  - `observability-and-instrumentation` from `skills/observability-and-instrumentation`
+  - `performance-optimization` from `skills/performance-optimization`
+  - `security-and-hardening` from `skills/security-and-hardening`
+  - `shipping-and-launch` from `skills/shipping-and-launch`
+  - `source-driven-development` from `skills/source-driven-development`
+  - `spec-driven-development` from `skills/spec-driven-development`
+  - `planning-and-task-breakdown` from `skills/planning-and-task-breakdown`
+  - `incremental-implementation` from `skills/incremental-implementation`
+  - `debugging-and-error-recovery` from `skills/debugging-and-error-recovery`
+  - `test-driven-development` from `skills/test-driven-development`
+  - `using-agent-skills` from `skills/using-agent-skills`
 
 ### addyosmani Agent Skills
 
@@ -115,3 +147,14 @@ Get-ChildItem $destination -Directory | ForEach-Object {
 - Preserve the source repository and skill path when updating an entry.
 - Re-run validation after every restore or upgrade.
 - Do not install an entire external collection globally without reviewing overlap, scripts, permissions, and activation behavior.
+
+## Custom Pi Package
+
+### pi-lazy-tools-custom
+
+Custom pi extension package bundling the `lazy-tools` dynamic tool loading extension.
+
+- **Package**: `pi-lazy-tools-custom` (local, publishable to npm)
+- **Source**: `extensions/lazy-tools/index.ts`
+- **Install**: `pi install ./pi-lazy-tools-custom` (local) or `npm publish` then `pi install npm:pi-lazy-tools-custom`
+- **Function**: Defers heavyweight tool groups (MCP gateway, web research, bg/fusion tasks, Linear) until activated via `search_tools`; seeds Linear tool settings on first run.

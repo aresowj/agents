@@ -16,6 +16,9 @@
     "npm:pi-simplify",
     "npm:billion-context"
   ],
+  "extensions": [
+    "../extensions"
+  ],
   "outputPad": 1,
   "terminal": {
     "showTerminalProgress": true
