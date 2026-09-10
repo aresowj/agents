@@ -14,10 +14,8 @@
     "npm:@plannotator/pi-extension",
     "npm:@narumitw/pi-goal",
     "npm:pi-simplify",
-    "npm:billion-context"
-  ],
-  "extensions": [
-    "../extensions"
+    "npm:billion-context",
+    ".."
   ],
   "outputPad": 1,
   "terminal": {
