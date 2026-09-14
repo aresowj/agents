@@ -1,22 +1,36 @@
-# Repository Guidelines
+# Agent Guidance
 
-This repository stores portable agent skills and Pi configuration. Keep instructions concise, environment-specific where necessary, and resistant to tool or model churn.
+This repository publishes as `@aresowj/pi-lazy-tools` (a Pi extension package) and maintains external skill references in `EXTERNAL_SKILLS.md`.
 
-## Skill changes
+## Repository structure
 
-- Every skill lives in a root-level directory with a `SKILL.md` whose frontmatter `name` matches the directory name.
-- Descriptions must say what the skill does and when it should activate. Avoid catch-all language that routes unrelated requests into a skill.
-- Put durable decisions and non-obvious constraints in skills. Do not copy model catalogs, benchmark claims, or tool schemas that the active runtime can expose directly.
-- Keep authorization boundaries explicit. Delegation never grants a subagent broader edit, network, or external-mutation permission than the parent received.
-- Prefer runtime capability discovery over guessed tool names or parameters.
-- Avoid overlap: extend the owning skill or remove the superseded skill instead of maintaining two near-duplicates.
+- `.pi/` — Pi environment config (packages list, settings, auth). See `README.md` for Pi setup.
+- `extensions/lazy-tools/` — Pi extension (Node.js, TypeScript). Defers heavyweight tool groups behind `search_tools` to keep system prompts small.
+- `EXTERNAL_SKILLS.md` — Registry of external skills with restore and validation instructions.
+- CI runs `pre-commit` hooks on every PR and push to `main`.
 
-## Verification
+## Local agent routing
 
-Before pushing or opening a pull request:
+**Local agent available:** hostname `kagami`, max 1 concurrent task, ~65k context, ~40 tok/s generation.
 
-1. Run the local skill validator against every root-level skill directory.
-2. Run `pre-commit run --all-files`.
-3. Inspect the complete diff for stale references, accidental files, secrets, and mismatched documentation.
+**Use for:**
+- Simple to medium-complexity reasoning tasks (not low-effort tasks).
+- General coding work: refactoring, debugging, test writing, code review.
+- Tasks where you can tolerate slower output (cloud cost savings justify latency).
+
+**Do NOT use for:**
+- Urgent/blocking work (40 tok/s is slow for interactive debugging).
+- Large reasoning problems requiring 60k+ context or multiple reasoning steps.
+- Parallel work (max 1 concurrent task; avoid spawning multiple tasks to this model).
+
+**How to delegate:** When a task fits the profile above, explicitly request the local agent. Never auto-spawn concurrent tasks to `kagami`; prefer sequential work or wait for non-urgent background processing.
+
+## Pre-commit verification
+
+Before pushing or opening a PR:
+
+1. Run `pre-commit run --all-files`.
+2. Verify `extensions/lazy-tools/index.ts` passes TypeScript (if pi dev environment available; otherwise skip).
+3. Inspect diff for stale references, secrets, `.pi/auth.json` leaks.
 
 Never use CI as the first validation pass.
