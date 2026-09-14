@@ -6,6 +6,8 @@ Portable Pi configuration and extensions for local agent workflows.
 
 The `.pi/` directory contains settings and a package manifest for restoring a Pi environment. The root `@aresowj/pi-lazy-tools` Pi package provides the `lazy-tools` extension, which keeps heavyweight capability groups hidden until searched and activated. Install it with `pi install npm:@aresowj/pi-lazy-tools` after publishing.
 
+Configure default rules inside Pi with `/lazy-tools`: use `eager <tool-or-prefix>`, `lazy <tool-or-prefix>`, `default <tool-or-prefix>`, `show`, or `reset`. Rules persist in `~/.pi/agent/lazy-tools.json` and apply immediately.
+
 Review `.pi/auth.json` before sharing or restoring configuration. Never commit live credentials.
 
 External skills installed outside this repository are pinned in `EXTERNAL_SKILLS.md`.
