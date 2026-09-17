@@ -5,6 +5,8 @@ This repository publishes as `@aresowj/pi-lazy-tools` (a Pi extension package) a
 ## Repository structure
 
 - `.pi/` — Pi environment config (packages list, settings, auth). See `README.md` for Pi setup.
+- `docs/cursor-worker-daemon.md` — macOS launchd setup for `agent worker` on this machine.
+- `scripts/cursor-worker/` — install, status, restart, and uninstall scripts for the worker daemon.
 - `extensions/lazy-tools/` — Pi extension (Node.js, TypeScript). Defers heavyweight tool groups behind `search_tools` to keep system prompts small.
 - `EXTERNAL_SKILLS.md` — Registry of external skills with restore and validation instructions.
 - CI runs `pre-commit` hooks on every PR and push to `main`.

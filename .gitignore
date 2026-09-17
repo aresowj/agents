@@ -27,3 +27,6 @@ coverage.out
 # IDEs
 .vscode/
 .idea/
+
+# Local cursor worker daemon overrides
+scripts/cursor-worker/config.env
