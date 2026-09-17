@@ -12,6 +12,17 @@ Review `.pi/auth.json` before sharing or restoring configuration. Never commit l
 
 External skills installed outside this repository are pinned in `EXTERNAL_SKILLS.md`.
 
+## Cursor worker daemon (macOS)
+
+Run this repo as a background **My Machines** worker for Cursor Cloud Agents (starts at login, restarts on crash):
+
+```bash
+./scripts/cursor-worker/install.sh
+./scripts/cursor-worker/status.sh
+```
+
+Full setup, configuration, and troubleshooting: [`docs/cursor-worker-daemon.md`](docs/cursor-worker-daemon.md).
+
 ## Validate changes
 
 Run the repository hooks before submitting changes:

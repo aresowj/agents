@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>com.cursor.agent-worker</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>@@AGENT_BIN@@</string>
+		<string>worker</string>
+		<string>--worker-dir</string>
+		<string>@@WORKER_DIR@@</string>
+		<string>--name</string>
+		<string>@@WORKER_NAME@@</string>
+		<string>start</string>
+	</array>
+	<key>WorkingDirectory</key>
+	<string>@@WORKER_DIR@@</string>
+	<key>EnvironmentVariables</key>
+	<dict>
+		<key>HOME</key>
+		<string>@@HOME@@</string>
+		<key>PATH</key>
+		<string>@@HOME@@/.local/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+	</dict>
+	<key>RunAtLoad</key>
+	<true/>
+	<key>KeepAlive</key>
+	<true/>
+	<key>StandardOutPath</key>
+	<string>@@STDOUT_LOG@@</string>
+	<key>StandardErrorPath</key>
+	<string>@@STDERR_LOG@@</string>
+	<key>ThrottleInterval</key>
+	<integer>10</integer>
+</dict>
+</plist>
