@@ -27,6 +27,12 @@ This repository publishes as `@aresowj/pi-lazy-tools` (a Pi extension package) a
 
 **How to delegate:** When a task fits the profile above, explicitly request the local agent. Never auto-spawn concurrent tasks to `kagami`; prefer sequential work or wait for non-urgent background processing.
 
+## Codex custom subagents
+
+- For bounded, fully specified coding work, use the `routine-implementer` custom agent. Provide the task scope, acceptance criteria, and relevant context.
+- Before handing off or merging code changes, use the read-only `reviewer` custom agent with the exact diff, requirements, and available verification evidence. Keep fixes and the final disposition with the primary agent.
+- Run implementation and review sequentially. Respect explicit user requests to skip delegation or use a different workflow.
+
 ## Pre-commit verification
 
 Before pushing or opening a PR:
