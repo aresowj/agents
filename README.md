@@ -1,6 +1,10 @@
 # Agent Configuration
 
-Portable Pi configuration and extensions for local agent workflows.
+Portable Pi configuration, extensions, and reusable subagent prompts for local agent workflows.
+
+## Reusable subagents
+
+The agents/ directory contains custom subagent prompts for reuse across projects.
 
 ## Pi configuration
 
