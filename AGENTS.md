@@ -33,6 +33,31 @@ This repository publishes as `@aresowj/pi-lazy-tools` (a Pi extension package) a
 - Before handing off or merging code changes, use the read-only `reviewer` custom agent with the exact diff, requirements, and available verification evidence. Keep fixes and the final disposition with the primary agent.
 - Run implementation and review sequentially. Respect explicit user requests to skip delegation or use a different workflow.
 
+## DeepSeek worker execution rules
+
+Applies to any harness driving headless OpenCode workers (`opencode run`): Codex, Claude Code, Gemini CLI, Antigravity, or a shell script.
+
+- NEVER run `opencode run` with unredirected stdout/stderr in `run_command`. Streaming text, tool calls, and stderr can flood the calling agent's context or block on TTY reads.
+- Always invoke parallel workers via `./scripts/run-worker.sh <worktree-dir> <plan-file> <log-name>`. The script detaches stdin (`</dev/null`), routes stdout and stderr to `${OPENCODE_WORKER_LOG_DIR:-/tmp}/opencode-<log-name>.log`, and prints only `worker=<log-name> exit=<code> log=<path>`.
+- One worker per git worktree. Never point two workers at the same worktree or at overlapping files.
+- When workers finish, inspect ONLY:
+  - exit codes from the summary line (or `wait`),
+  - `git -C <worktree-dir> diff --stat`,
+  - `tail -n 25 <log-file>` for the failure tail.
+  Never `cat` a full log into context.
+- Overrides: `OPENCODE_WORKER_MODEL` (default `opencode-go/deepseek-v4.1-flash`), `OPENCODE_WORKER_LOG_DIR` (default `/tmp`).
+- Do not pass `--dir` to `opencode run`: v2.2.7 has no such flag. The wrapper `cd`s into the worktree instead.
+
+Launch several workers without blocking the caller:
+
+```bash
+./scripts/run-worker.sh ../worktrees/api plans/api.md api &
+./scripts/run-worker.sh ../worktrees/ui  plans/ui.md  ui  &
+wait
+git -C ../worktrees/api diff --stat
+tail -n 25 /tmp/opencode-api.log
+```
+
 ## Pre-commit verification
 
 Before pushing or opening a PR:
