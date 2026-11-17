@@ -38,7 +38,7 @@ This repository publishes as `@aresowj/pi-lazy-tools` (a Pi extension package) a
 Applies to any harness driving headless OpenCode workers (`opencode run`): Codex, Claude Code, Gemini CLI, Antigravity, or a shell script.
 
 - NEVER run `opencode run` with unredirected stdout/stderr in `run_command`. Streaming text, tool calls, and stderr can flood the calling agent's context or block on TTY reads.
-- Always invoke parallel workers via `./scripts/run-worker.sh <worktree-dir> <plan-file> <log-name>`. The script detaches stdin (`</dev/null`), routes stdout and stderr to `${OPENCODE_WORKER_LOG_DIR:-/tmp}/opencode-<log-name>.log`, and prints only `worker=<log-name> exit=<code> log=<path>`.
+- Always invoke parallel workers via `run-worker <worktree-dir> <plan-file> <log-name>` (installed on PATH; `./scripts/run-worker.sh` is equivalent inside this repo). The script detaches stdin (`</dev/null`), routes stdout and stderr to `${OPENCODE_WORKER_LOG_DIR:-/tmp}/opencode-<log-name>.log`, and prints only `worker=<log-name> exit=<code> log=<path>`.
 - One worker per git worktree. Never point two workers at the same worktree or at overlapping files.
 - When workers finish, inspect ONLY:
   - exit codes from the summary line (or `wait`),
@@ -51,12 +51,31 @@ Applies to any harness driving headless OpenCode workers (`opencode run`): Codex
 Launch several workers without blocking the caller:
 
 ```bash
-./scripts/run-worker.sh ../worktrees/api plans/api.md api &
-./scripts/run-worker.sh ../worktrees/ui  plans/ui.md  ui  &
+run-worker ../worktrees/api plans/api.md api &
+run-worker ../worktrees/ui  plans/ui.md  ui  &
 wait
 git -C ../worktrees/api diff --stat
 tail -n 25 /tmp/opencode-api.log
 ```
+
+### Setup and sync
+
+On a new machine, clone this repository and link everything in one pass:
+
+```bash
+git clone git@github.com:aresowj/agents.git ~/agents
+
+ln -sfn ~/agents/AGENTS.md ~/.codex/AGENTS.md
+ln -sfn ~/agents/AGENTS.md ~/.config/opencode/AGENTS.md
+ln -sfn ~/agents/AGENTS.md ~/.claude/CLAUDE.md
+ln -sfn ~/agents/AGENTS.md ~/.gemini/GEMINI.md
+
+~/agents/scripts/install-worker-link.sh   # -> ~/.local/bin/run-worker
+```
+
+- Rule files are symlinked, not copied, so `git -C ~/agents pull` updates every harness at once. Do not replace a link with a copy.
+- `install-worker-link.sh` accepts an optional bin directory (default `~/.local/bin`), refuses to overwrite a real file, and only replaces symlinks.
+- Re-run the link step after moving the clone: symlinks store absolute paths and break silently when the target moves.
 
 ## Pre-commit verification
 
