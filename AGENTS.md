@@ -77,6 +77,10 @@ ln -sfn ~/agents/AGENTS.md ~/.gemini/GEMINI.md
 - `install-worker-link.sh` accepts an optional bin directory (default `~/.local/bin`), refuses to overwrite a real file, and only replaces symlinks.
 - Re-run the link step after moving the clone: symlinks store absolute paths and break silently when the target moves.
 
+## Plan orchestration (waves)
+
+Execute a `plans/*.md` backlog with the `wave-orchestrator` skill (`skills/wave-orchestrator/SKILL.md`): disjoint parallel waves, one worktree per plan, `run-worker` only, verify then merge. Never delegate it to subagents.
+
 ## Pre-commit verification
 
 Before pushing or opening a PR:
