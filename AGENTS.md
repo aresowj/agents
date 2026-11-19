@@ -77,6 +77,7 @@ On a new machine, clone this repository and link everything in one pass:
 ```bash
 git clone git@github.com:aresowj/agents.git ~/agents
 
+ln -sfn ~/agents/AGENTS.md ~/AGENTS.md
 ln -sfn ~/agents/AGENTS.md ~/.codex/AGENTS.md
 ln -sfn ~/agents/AGENTS.md ~/.config/opencode/AGENTS.md
 ln -sfn ~/agents/AGENTS.md ~/.claude/CLAUDE.md
