@@ -2,6 +2,14 @@
 
 This repository publishes as `@aresowj/pi-lazy-tools` (a Pi extension package) and maintains external skill references in `EXTERNAL_SKILLS.md`.
 
+## Starting new work
+
+Always pull the latest `main` before starting new work:
+
+```bash
+git -C ~/agents pull --ff-only origin main
+```
+
 ## Repository structure
 
 - `.pi/` — Pi environment config (packages list, settings, auth). See `README.md` for Pi setup.
