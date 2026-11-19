@@ -2,6 +2,10 @@
 
 This repository publishes as `@aresowj/pi-lazy-tools` (a Pi extension package) and maintains external skill references in `EXTERNAL_SKILLS.md`.
 
+## Security
+
+- NEVER sync the OpenAI API key to the repo. Keep it in environment variables only.
+
 ## Starting new work
 
 Always pull the latest `main` before starting new work:
