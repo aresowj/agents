@@ -46,6 +46,15 @@ git -C ~/agents pull --ff-only origin main
 - Before handing off or merging code changes, use the read-only `reviewer` custom agent with the exact diff, requirements, and available verification evidence. Keep fixes and the final disposition with the primary agent.
 - Run implementation and review sequentially. Respect explicit user requests to skip delegation or use a different workflow.
 
+## Keeping agent definitions in sync
+
+Each agent in `agents/` has two definitions: `<name>.toml` for Codex and `<name>.md` for Claude Code. Keep them in sync:
+
+- Any change to one file's `name`, `description`, or instructions (the TOML `developer_instructions` and the Markdown body) must be made to the other in the same commit.
+- When adding a new agent, create both files. When removing one, remove both.
+- Models are per-harness and intentionally differ: TOML `model`/`model_reasoning_effort` use Codex models; Markdown `model:` uses Claude models. Changing one does not require changing the other.
+- Harness-specific wording may differ only where a feature does not exist in the other harness (for example, Codex `sandbox_mode` vs. Claude Code `tools:` and a read-only instruction).
+
 ## Claude Code subagent models
 
 When starting a subagent with the Agent tool, always pass `model` as below, unless the user asks for a different one:
