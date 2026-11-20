@@ -11,9 +11,11 @@ branches, and merge them into `main` wave by wave.
 
 ## Operating contract
 
-- **One model for workers.** `opencode-go/deepseek-v4.1-flash`, set explicitly.
-  Do not change it, do not pass a different `--model`, and do not spawn
-  subagents, reviewers, or helper agents for this workflow. The orchestrator
+- **One model chain for workers.** `run-worker`'s default fallback chain
+  (OpenCode free DeepSeek Flash, then OpenCode Go DeepSeek Flash, then DeepSeek
+  direct Flash; see "Model fallback rule" in `AGENTS.md`). Do not set
+  `OPENCODE_WORKER_MODEL`, do not pass `--model`, and do not spawn subagents,
+  reviewers, or helper agents for this workflow. The orchestrator
   also verifies, merges, and fixes scheduling itself.
 - **One worker per worktree, one worktree per plan.** Never point two workers at
   the same directory or at overlapping files.
@@ -78,7 +80,7 @@ Write the result to `plans/STATUS.md` before launching anything:
 
 Updated: <ISO timestamp>
 Base: main @ <sha>
-Worker model: opencode-go/deepseek-v4.1-flash
+Worker models: run-worker default chain (record the `model=` each worker reports)
 Concurrency: <n>
 
 ## Schedule
@@ -148,7 +150,7 @@ Launch every plan in the current wave in parallel and block until all exit:
 
 ```bash
 set -euo pipefail
-export OPENCODE_WORKER_MODEL=opencode-go/deepseek-v4.1-flash
+unset OPENCODE_WORKER_MODEL   # keep run-worker's fallback chain
 export OPENCODE_WORKER_LOG_DIR="${TMPDIR:-/tmp}/opencode-orchestrator"
 mkdir -p "$OPENCODE_WORKER_LOG_DIR"
 WORKER=$(command -v run-worker || echo "$HOME/agents/scripts/run-worker.sh")
@@ -180,8 +182,11 @@ Notes:
 
 For each plan, inspect only:
 
-1. the summary line / exit code (`worker=<id> exit=<code> log=<path>`, where the
-   log is `$OPENCODE_WORKER_LOG_DIR/opencode-<log-name>.log`)
+1. the summary line / exit code (`worker=<id> exit=<code> model=<model> log=<path>`,
+   where the log is `$OPENCODE_WORKER_LOG_DIR/opencode-<log-name>.log`). Exit
+   `75` means every model in the chain made no progress: mark the plan
+   `blocked: models exhausted` and tell the user. Falling back to Claude
+   breaks this skill's no-subagent rule, so do it only if the user asks.
 2. `git -C "$WT" diff --stat main...HEAD` and `git -C "$WT" log --oneline main..HEAD`
 3. `tail -n 30 "$LOG"` on failure, plus `git -C "$WT" status --short`
 
