@@ -1,0 +1,9 @@
+{
+  "enableWorkflows": true,
+  "autoUpdatesChannel": "latest",
+  "theme": "dark",
+  "agentPushNotifEnabled": true,
+  "env": {
+    "CLAUDE_CODE_SUBAGENT_MODEL": "sonnet"
+  }
+}

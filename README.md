@@ -6,6 +6,15 @@ Portable Pi configuration, extensions, and reusable subagent prompts for local a
 
 The agents/ directory contains custom subagent prompts for reuse across projects.
 
+## Claude Code configuration
+
+The `claude/` directory mirrors user-level Claude Code config from `~/.claude/`:
+
+- `CLAUDE.md` — tells Claude which model to pass to each built-in subagent (Plan on Opus; general-purpose and claude on Sonnet; Explore, web-fetch, claude-code-guide and statusline-setup on Haiku).
+- `settings.json` — sets `CLAUDE_CODE_SUBAGENT_MODEL=sonnet` as the default for subagents without their own model.
+
+Restore by copying both files into `~/.claude/`.
+
 ## Pi configuration
 
 The `.pi/` directory contains settings and a package manifest for restoring a Pi environment. The root `@aresowj/pi-lazy-tools` Pi package provides the `lazy-tools` extension, which keeps heavyweight capability groups hidden until searched and activated. Install it with `pi install npm:@aresowj/pi-lazy-tools` after publishing.
