@@ -8,12 +8,9 @@ The agents/ directory contains custom subagent prompts for reuse across projects
 
 ## Claude Code configuration
 
-The `claude/` directory mirrors user-level Claude Code config from `~/.claude/`:
+`claude/settings.json` mirrors `~/.claude/settings.json`, including `CLAUDE_CODE_SUBAGENT_MODEL=sonnet` as the default for subagents without their own model. Restore it by copying it to `~/.claude/settings.json`.
 
-- `CLAUDE.md` — tells Claude which model to pass to each built-in subagent (Plan on Opus; general-purpose and claude on Sonnet; Explore, web-fetch, claude-code-guide and statusline-setup on Haiku).
-- `settings.json` — sets `CLAUDE_CODE_SUBAGENT_MODEL=sonnet` as the default for subagents without their own model.
-
-Restore by copying both files into `~/.claude/`.
+Per-agent model routing (Plan on Opus; general-purpose and claude on Sonnet; Explore, web-fetch, claude-code-guide and statusline-setup on Haiku) lives in `AGENTS.md`, which reaches Claude through the `~/.claude/CLAUDE.md` symlink described there.
 
 ## Reusable skills
 
