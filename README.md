@@ -6,6 +6,12 @@ Portable Pi configuration, extensions, and reusable subagent prompts for local a
 
 The agents/ directory contains custom subagent prompts for reuse across projects.
 
+## Claude Code configuration
+
+`claude/settings.json` mirrors `~/.claude/settings.json`, including `CLAUDE_CODE_SUBAGENT_MODEL=sonnet` as the default for subagents without their own model. Restore it by copying it to `~/.claude/settings.json`.
+
+Per-agent model routing (Plan on Opus; general-purpose and claude on Sonnet; Explore, web-fetch, claude-code-guide and statusline-setup on Haiku) lives in `AGENTS.md`, which reaches Claude through the `~/.claude/CLAUDE.md` symlink described there.
+
 ## Reusable skills
 
 `skills/` contains harness skills that load on demand.

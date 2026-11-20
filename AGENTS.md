@@ -17,6 +17,7 @@ git -C ~/agents pull --ff-only origin main
 ## Repository structure
 
 - `.pi/` — Pi environment config (packages list, settings, auth). See `README.md` for Pi setup.
+- `claude/` — Claude Code user settings mirrored from `~/.claude/settings.json` (default subagent model). Per-agent model routing lives in this file.
 - `docs/cursor-worker-daemon.md` — macOS launchd setup for `agent worker` on this machine.
 - `scripts/cursor-worker/` — install, status, restart, and uninstall scripts for the worker daemon.
 - `extensions/lazy-tools/` — Pi extension (Node.js, TypeScript). Defers heavyweight tool groups behind `search_tools` to keep system prompts small.
@@ -44,6 +45,38 @@ git -C ~/agents pull --ff-only origin main
 - For bounded, fully specified coding work, use the `routine-implementer` custom agent. Provide the task scope, acceptance criteria, and relevant context.
 - Before handing off or merging code changes, use the read-only `reviewer` custom agent with the exact diff, requirements, and available verification evidence. Keep fixes and the final disposition with the primary agent.
 - Run implementation and review sequentially. Respect explicit user requests to skip delegation or use a different workflow.
+
+## Keeping agent definitions in sync
+
+Each agent in `agents/` has two definitions: `<name>.toml` for Codex and `<name>.md` for Claude Code. Keep them in sync:
+
+- Any change to one file's `name`, `description`, or instructions (the TOML `developer_instructions` and the Markdown body) must be made to the other in the same commit.
+- When adding a new agent, create both files. When removing one, remove both.
+- Models are per-harness and intentionally differ: TOML `model`/`model_reasoning_effort` use Codex models; Markdown `model:` uses Claude models. Changing one does not require changing the other.
+- Harness-specific wording may differ only where a feature does not exist in the other harness (for example, Codex `sandbox_mode` vs. Claude Code `tools:` and a read-only instruction).
+
+## Claude Code subagent models
+
+When starting a subagent with the Agent tool, always pass `model` as below, unless the user asks for a different one:
+
+| Agent type | model |
+|---|---|
+| Plan | opus |
+| general-purpose | sonnet |
+| claude | sonnet |
+| Explore | haiku |
+| web-fetch | haiku |
+| claude-code-guide | haiku |
+| statusline-setup | haiku |
+
+Custom agents from `agents/*.md`:
+
+| Agent | model |
+|---|---|
+| reviewer | opus (set in its file) |
+| routine-implementer | haiku for simple, mechanical tasks (renames, small edits in one or two files, boilerplate); sonnet otherwise. Its file defaults to sonnet, so pass `model: haiku` for the simple ones. When unsure, use sonnet. |
+
+Other agents (custom or from plugins) keep their own `model` setting; if they have none, Sonnet is the default via `CLAUDE_CODE_SUBAGENT_MODEL` in `claude/settings.json`. Other harnesses can ignore this section.
 
 ## DeepSeek worker execution rules
 
