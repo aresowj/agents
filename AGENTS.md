@@ -60,6 +60,13 @@ When starting a subagent with the Agent tool, always pass `model` as below, unle
 | claude-code-guide | haiku |
 | statusline-setup | haiku |
 
+Custom agents from `agents/*.md`:
+
+| Agent | model |
+|---|---|
+| reviewer | opus (set in its file) |
+| routine-implementer | haiku for simple, mechanical tasks (renames, small edits in one or two files, boilerplate); sonnet otherwise. Its file defaults to sonnet, so pass `model: haiku` for the simple ones. When unsure, use sonnet. |
+
 Other agents (custom or from plugins) keep their own `model` setting; if they have none, Sonnet is the default via `CLAUDE_CODE_SUBAGENT_MODEL` in `claude/settings.json`. Other harnesses can ignore this section.
 
 ## DeepSeek worker execution rules
