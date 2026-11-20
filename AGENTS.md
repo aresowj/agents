@@ -42,7 +42,8 @@ git -C ~/agents pull --ff-only origin main
 
 ## Codex custom subagents
 
-- For bounded, fully specified coding work, use the `routine-implementer` custom agent. Provide the task scope, acceptance criteria, and relevant context.
+- For most bounded, fully specified coding work, use the `deepseek-implementer` custom agent: it writes a plan and dispatches it to a headless DeepSeek Flash worker through `run-worker`, then verifies the result. Use `routine-implementer` when the model fallback rule below reaches the Claude tier, or when the task cannot run in a separate git worktree.
+- For bounded, fully specified coding work done directly by the agent, use the `routine-implementer` custom agent. Provide the task scope, acceptance criteria, and relevant context.
 - Before handing off or merging code changes, use the read-only `reviewer` custom agent with the exact diff, requirements, and available verification evidence. Keep fixes and the final disposition with the primary agent.
 - Run implementation and review sequentially. Respect explicit user requests to skip delegation or use a different workflow.
 
@@ -74,6 +75,7 @@ Custom agents from `agents/*.md`:
 | Agent | model |
 |---|---|
 | reviewer | opus (set in its file) |
+| deepseek-implementer | sonnet (set in its file); it only plans, dispatches and verifies |
 | routine-implementer | haiku for simple, mechanical tasks (renames, small edits in one or two files, boilerplate); sonnet otherwise. Its file defaults to sonnet, so pass `model: haiku` for the simple ones. When unsure, use sonnet. |
 
 Other agents (custom or from plugins) keep their own `model` setting; if they have none, Sonnet is the default via `CLAUDE_CODE_SUBAGENT_MODEL` in `claude/settings.json`. Other harnesses can ignore this section.
@@ -83,14 +85,26 @@ Other agents (custom or from plugins) keep their own `model` setting; if they ha
 Applies to any harness driving headless OpenCode workers (`opencode run`): Codex, Claude Code, Gemini CLI, Antigravity, or a shell script.
 
 - NEVER run `opencode run` with unredirected stdout/stderr in `run_command`. Streaming text, tool calls, and stderr can flood the calling agent's context or block on TTY reads.
-- Always invoke parallel workers via `run-worker <worktree-dir> <plan-file> <log-name>` (installed on PATH; `./scripts/run-worker.sh` is equivalent inside this repo). The script detaches stdin (`</dev/null`), routes stdout and stderr to `${OPENCODE_WORKER_LOG_DIR:-/tmp}/opencode-<log-name>.log`, and prints only `worker=<log-name> exit=<code> log=<path>`.
+- Always invoke parallel workers via `run-worker <worktree-dir> <plan-file> <log-name>` (installed on PATH; `./scripts/run-worker.sh` is equivalent inside this repo). The script detaches stdin (`</dev/null`), routes stdout and stderr to `${OPENCODE_WORKER_LOG_DIR:-/tmp}/opencode-<log-name>.log`, and prints only `worker=<log-name> exit=<code> model=<model> log=<path>`.
 - One worker per git worktree. Never point two workers at the same worktree or at overlapping files.
 - When workers finish, inspect ONLY:
   - exit codes from the summary line (or `wait`),
   - `git -C <worktree-dir> diff --stat`,
   - `tail -n 25 <log-file>` for the failure tail.
   Never `cat` a full log into context.
-- Overrides: `OPENCODE_WORKER_MODEL` (default `opencode-go/deepseek-v4.1-flash`), `OPENCODE_WORKER_LOG_DIR` (default `/tmp`).
+- Overrides: `OPENCODE_WORKER_MODELS` (space-separated fallback chain, default below), `OPENCODE_WORKER_MODEL` (pins one model and disables fallback), `OPENCODE_WORKER_LOG_DIR` (default `/tmp`; on Windows set it to a real folder).
+- Keep the DeepSeek API key in `DEEPSEEK_API_KEY` or OpenCode's own auth store (`opencode auth login`), never in this repository.
+
+### Model fallback rule
+
+Implementation work goes down this chain, moving to the next tier only when the current one fails to run (rate limit, exhausted quota, auth error, unavailable model):
+
+1. OpenCode free DeepSeek Flash: `opencode/deepseek-v4.1-flash-free`
+2. OpenCode Go DeepSeek Flash: `opencode-go/deepseek-v4.1-flash`
+3. DeepSeek direct Flash: `deepseek/deepseek-flash`
+4. Claude Sonnet or Haiku, the native models in the Claude subscription: `routine-implementer` with `model` per the subagent table (haiku for simple, mechanical tasks; sonnet otherwise).
+
+`run-worker` handles tiers 1–3 itself. It moves to the next model only when an attempt left `HEAD` and `git status --porcelain` unchanged; an attempt that changed the worktree is final, so partial work is never handed to another model. It exits `75` when every OpenCode tier made no progress: that is the signal for tier 4. Do not fall back to Claude on an ordinary failure (tests failing, out-of-scope diff); retry or fix that on the same chain. Harnesses without Claude models stop at tier 3 and report.
 - Do not pass `--dir` to `opencode run`: v2.2.7 has no such flag. The wrapper `cd`s into the worktree instead.
 
 Launch several workers without blocking the caller:
