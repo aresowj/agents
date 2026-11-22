@@ -141,6 +141,10 @@ ln -sfn ~/agents/AGENTS.md ~/.gemini/GEMINI.md
 
 Execute a `plans/*.md` backlog with the `wave-orchestrator` skill (`skills/wave-orchestrator/SKILL.md`): disjoint parallel waves, one worktree per plan, `run-worker` only, verify then merge. Never delegate it to subagents.
 
+## Platform bugbash
+
+For a bugbash, QA pass or device walkthrough on Android, iOS or web, use the `platform-bugbash` skill (`skills/platform-bugbash/SKILL.md`): one draft PR that is never merged, tests for every fix, and every device in the matrix verified.
+
 ## Pre-commit verification
 
 Before pushing or opening a PR:
