@@ -19,14 +19,20 @@ Per-agent model routing (Plan on Opus; general-purpose and claude on Sonnet; Exp
 - `wave-orchestrator` — executes a `plans/*.md` backlog in dependency-ordered
   parallel waves: one worktree per plan, `run-worker` for execution, verification
   before each merge, and a live `plans/STATUS.md` schedule.
+- `platform-bugbash` — multi-round bugbash of an app on Android emulators, iOS
+  simulators or web browsers: sets up the toolchain and a Podman backend, walks
+  every screen signed in with seeded content on the most popular devices, and
+  collects fixes plus unit, integration, regression and e2e tests in one draft PR.
 
 Link a skill into a harness so it is discovered (symlink, so `git pull` updates it):
 
 ```bash
 mkdir -p ~/.config/opencode/skills ~/.claude/skills ~/.agents/skills
-ln -sfn ~/agents/skills/wave-orchestrator ~/.config/opencode/skills/wave-orchestrator
-ln -sfn ~/agents/skills/wave-orchestrator ~/.claude/skills/wave-orchestrator
-ln -sfn ~/agents/skills/wave-orchestrator ~/.agents/skills/wave-orchestrator
+for skill in wave-orchestrator platform-bugbash; do
+  ln -sfn ~/agents/skills/$skill ~/.config/opencode/skills/$skill
+  ln -sfn ~/agents/skills/$skill ~/.claude/skills/$skill
+  ln -sfn ~/agents/skills/$skill ~/.agents/skills/$skill
+done
 ```
 
 ## Pi configuration
