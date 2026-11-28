@@ -47,7 +47,7 @@ External skills installed outside this repository are pinned in `EXTERNAL_SKILLS
 
 ## OpenCode and Repowise
 
-`opencode/` holds the user-scope OpenCode MCP entry for [Repowise](https://docs.repowise.dev), so every repository on the machine can query a local index instead of grepping. The agent guidance that goes with it lives in `AGENTS.md` above and reaches every harness through the symlinks below. Install and restore steps: [`opencode/README.md`](opencode/README.md).
+`opencode/` holds the user-scope OpenCode MCP entry for [Repowise](https://docs.repowise.dev), so every repository on the machine can query a local index instead of grepping. The agent guidance that goes with it lives in `AGENTS.md` above and reaches every harness through the symlinks below. Install, restore and upgrade steps: [`opencode/README.md`](opencode/README.md).
 
 ## Cursor worker daemon (macOS)
 
