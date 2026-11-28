@@ -1,0 +1,15 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  // User-scope Repowise MCP server: serves whichever repository the session is in.
+  // Machine-specific absolute command paths are written by:
+  //   repowise agents add --target=opencode --yes
+  // Merge the "mcp" block below into ~/.config/opencode/opencode.jsonc if that
+  // file already has settings of its own.
+  "mcp": {
+    "repowise": {
+      "type": "local",
+      "command": ["repowise", "mcp", "--transport", "stdio"],
+      "enabled": true
+    }
+  }
+}
